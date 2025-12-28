@@ -7,12 +7,13 @@ const PRESETS = [
   { id: 'semintra', name: 'SEMINTRA (INSUFF. RENALE)', defaultDosage: 'DOSE 3KG' },
   { id: 'deflacam', name: 'DEFLACAM (ANTINFIAMM.)', defaultDosage: 'DOSE 1.5KG' },
   { id: 'gastrovom', name: 'GASTROVOM (GASTROPROTE.)', defaultDosage: '1 ML' },
-  { id: 'urys', name: 'URYS (INTEGRITA\' MUCOSA)', defaultDosage: '0.5 ML', options: ['0.5 ML', '1 ML'] }
+  { id: 'urys', name: 'URYS (INTEGRITA'' MUCOSA)', defaultDosage: '0.5 ML', options: ['0.5 ML', '1 ML'] },
+  { id: 'drenalase', name: 'DRENALASE PET MINI', defaultDosage: '1 cp/gg' }
 ];
 
 function LogMedicine() {
   const navigate = useNavigate();
-  // Initialize state: map preset IDs to { selected: false, dosage: default }
+  // Initialize state
   const [items, setItems] = useState(() => {
     const initial = {};
     PRESETS.forEach(p => {
@@ -41,7 +42,6 @@ function LogMedicine() {
   const saveLog = async () => {
     const selectedMedicines = [];
     
-    // Add selected presets
     PRESETS.forEach(p => {
       if (items[p.id].selected) {
         selectedMedicines.push({
@@ -51,7 +51,6 @@ function LogMedicine() {
       }
     });
 
-    // Add custom medicine if filled
     if (customName.trim()) {
       selectedMedicines.push({
         name: customName,
@@ -64,13 +63,6 @@ function LogMedicine() {
       return;
     }
 
-    // Save each medicine as a separate log entry or combined?
-    // Usually combined details are better but db structure supports single 'details'.
-    // Let's modify db schema slightly in mind or just save array in 'details'.
-    // Existing schema: details: { name, dosage }
-    // We should save multiple entries or one entry with multiple meds.
-    // Saving multiple entries is safer for querying "When did he take Evexia?"
-    
     try {
       await db.transaction('rw', db.logs, async () => {
         const now = Date.now();
