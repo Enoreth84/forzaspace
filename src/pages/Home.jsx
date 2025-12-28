@@ -37,7 +37,7 @@ function Home() {
          content = ` Peso: ${log.details} kg`;
         break;
       default:
-        content = ' Nota';
+        content = '� Nota';
     }
     return `${time} - ${content}`;
   };
@@ -84,8 +84,17 @@ function Home() {
         <h3>Ultime Attività</h3>
         <ul style={{ listStyle: 'none', padding: 0 }}>
           {recentLogs?.map(log => (
-            <li key={log.id} style={{ padding: '0.5rem 0', borderBottom: '1px solid #eee' }}>
-              {formatLog(log)}
+            <li key={log.id} style={{ 
+              padding: '0.5rem 0', 
+              borderBottom: '1px solid #eee',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center'
+            }}>
+              <span>{formatLog(log)}</span>
+              <Link to={`/edit/${log.id}`} style={{ textDecoration: 'none', fontSize: '1rem', padding: '0.2rem 0.5rem' }}>
+                
+              </Link>
             </li>
           ))}
           {!recentLogs?.length && <li style={{ color: '#999', fontStyle: 'italic' }}>Nessuna attività recente</li>}

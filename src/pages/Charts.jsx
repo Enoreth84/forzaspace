@@ -1,6 +1,6 @@
 ﻿import { useState, useEffect } from 'react';
 import { db } from '../services/db';
-import { processStats } from '../services/stats';
+import { processStats, processWeightStats } from '../services/stats';
 import { Link } from 'react-router-dom';
 import { 
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
@@ -8,16 +8,29 @@ import {
 } from 'recharts';
 
 function Charts() {
-  const [data, setData] = useState([]);
+  const [dailyData, setDailyData] = useState([]);
+  const [weightData, setWeightData] = useState([]);
   const [range, setRange] = useState(7); // default 7 days
 
   useEffect(() => {
     db.logs.orderBy('timestamp').toArray()
       .then(logs => {
+        // Daily stats (Food, Excretion)
         const stats = processStats(logs);
-        // Slice based on range (take last N items)
-        const sliced = stats.slice(-range);
-        setData(sliced);
+        const slicedStats = stats.slice(-range);
+        setDailyData(slicedStats);
+
+        // Weight stats (Granular)
+        const weights = processWeightStats(logs);
+        // Taking all weights within the date range of the sliced stats
+        // Or just taking the last N weight entries? 
+        // Better to filter weights by time range comparable to the daily stats
+        if (slicedStats.length > 0) {
+           const startTime = slicedStats[0].timestamp;
+           setWeightData(weights.filter(w => w.timestamp >= startTime));
+        } else {
+           setWeightData(weights.slice(-range * 2)); // Fallback if no daily stats
+        }
       })
       .catch(console.error);
   }, [range]);
@@ -53,7 +66,7 @@ function Charts() {
         <h3>Cibo Consumato (g) </h3>
         <div style={{ height: '250px', width: '100%', fontSize: '0.8rem' }}>
           <ResponsiveContainer>
-            <BarChart data={data}>
+            <BarChart data={dailyData}>
               <CartesianGrid strokeDasharray="3 3" vertical={false} />
               <XAxis dataKey="date" tickFormatter={formatDate} />
               <YAxis />
@@ -68,7 +81,7 @@ function Charts() {
         <h3>Bisogni (N°) </h3>
         <div style={{ height: '250px', width: '100%', fontSize: '0.8rem' }}>
           <ResponsiveContainer>
-            <BarChart data={data}>
+            <BarChart data={dailyData}>
               <CartesianGrid strokeDasharray="3 3" vertical={false} />
               <XAxis dataKey="date" tickFormatter={formatDate} />
               <YAxis allowDecimals={false} />
@@ -83,13 +96,23 @@ function Charts() {
 
       <div className="card" style={{ marginBottom: '2rem' }}>
         <h3>Peso (kg) </h3>
+        <p style={{ fontSize: '0.8rem', color: '#666', marginTop: '-0.5rem', marginBottom: '1rem' }}>
+          Monitoraggio puntuale (Data e Ora)
+        </p>
         <div style={{ height: '250px', width: '100%', fontSize: '0.8rem' }}>
           <ResponsiveContainer>
-            <LineChart data={data}>
+            <LineChart data={weightData}>
               <CartesianGrid strokeDasharray="3 3" vertical={false} />
-              <XAxis dataKey="date" tickFormatter={formatDate} />
+              <XAxis 
+                dataKey="timestamp" 
+                type="number" 
+                domain={['auto', 'auto']} 
+                tickFormatter={(ts) => new Date(ts).toLocaleDateString([], {day:'2-digit', month:'2-digit'})}
+              />
               <YAxis domain={['auto', 'auto']} padding={{ top: 20, bottom: 20 }} />
-              <Tooltip labelFormatter={formatDate} />
+              <Tooltip 
+                labelFormatter={(ts) => new Date(ts).toLocaleString([], {weekday: 'short', day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit'})}
+              />
               <Line type="monotone" dataKey="weight" stroke="#ff7300" strokeWidth={2} dot={{ r: 4 }} name="Peso (kg)" />
             </LineChart>
           </ResponsiveContainer>

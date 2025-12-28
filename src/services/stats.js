@@ -20,7 +20,9 @@ export const processStats = (logs) => {
         foodTotal: 0,
         peeCount: 0,
         pooCount: 0,
-        weight: null
+        // Weight is handled separately now for graphs, 
+        // but we might keep a daily avg if needed. 
+        // We'll skip weight in this aggregate for now.
       };
     }
 
@@ -37,26 +39,20 @@ export const processStats = (logs) => {
       case LogType.POO:
         dailyStats[date].pooCount += 1;
         break;
-        
-      case LogType.WEIGHT:
-        // Overwrite to keep the latest weight of the day
-        dailyStats[date].weight = parseFloat(log.details);
-        break;
     }
   });
 
-  // Convert to array and sort by date ascending
-  const sortedStats = Object.values(dailyStats).sort((a, b) => a.timestamp - b.timestamp);
-  
-  // Fill in missing weight data (carry forward previous weight)
-  let lastWeight = null;
-  sortedStats.forEach(stat => {
-     if (stat.weight !== null) {
-       lastWeight = stat.weight;
-     } else if (lastWeight !== null) {
-       stat.weight = lastWeight; // Interpolate for chart continuity
-     }
-  });
+  return Object.values(dailyStats).sort((a, b) => a.timestamp - b.timestamp);
+};
 
-  return sortedStats;
+export const processWeightStats = (logs) => {
+  return logs
+    .filter(log => log.type === LogType.WEIGHT)
+    .sort((a, b) => a.timestamp - b.timestamp)
+    .map(log => ({
+      timestamp: log.timestamp,
+      dateStr: new Date(log.timestamp).toLocaleDateString([], { day: '2-digit', month: '2-digit' }),
+      timeStr: new Date(log.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      weight: parseFloat(log.details)
+    }));
 };
