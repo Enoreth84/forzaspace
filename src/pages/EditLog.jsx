@@ -153,6 +153,7 @@ function EditLog() {
               <option> Triste</option>
               <option> Assonnato</option>
               <option> Pazzo</option>
+              <option> Rintontito</option>
             </select>
           </>
         );
