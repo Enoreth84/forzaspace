@@ -36,3 +36,7 @@ export async function importDB(jsonString) {
   }
 }
 
+// Update an existing log
+export async function updateLog(id, newData) {
+  return await db.logs.update(id, newData);
+}
