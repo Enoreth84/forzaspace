@@ -24,7 +24,7 @@ function LogExcretion() {
       navigate('/');
     } catch (err) {
       console.error(err);
-      alert('Errore nel salvataggio');
+      alert("Errore nel salvataggio");
     }
   };
 

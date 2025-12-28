@@ -3,17 +3,16 @@ import { useNavigate } from 'react-router-dom';
 import { db, LogType } from '../services/db';
 
 const PRESETS = [
-  { id: 'evexia', name: 'EVEXIA FAST (ANTIDOLORIFICO)', defaultDosage: '0.25 ML' },
-  { id: 'semintra', name: 'SEMINTRA (INSUFF. RENALE)', defaultDosage: 'DOSE 3KG' },
-  { id: 'deflacam', name: 'DEFLACAM (ANTINFIAMM.)', defaultDosage: 'DOSE 1.5KG' },
-  { id: 'gastrovom', name: 'GASTROVOM (GASTROPROTE.)', defaultDosage: '1 ML' },
-  { id: 'urys', name: 'URYS (INTEGRITA'' MUCOSA)', defaultDosage: '0.5 ML', options: ['0.5 ML', '1 ML'] },
-  { id: 'drenalase', name: 'DRENALASE PET MINI', defaultDosage: '1 cp/gg' }
+  { id: 'evexia', name: "EVEXIA FAST (ANTIDOLORIFICO)", defaultDosage: '0.25 ML' },
+  { id: 'semintra', name: "SEMINTRA (INSUFF. RENALE)", defaultDosage: 'DOSE 3KG' },
+  { id: 'deflacam', name: "DEFLACAM (ANTINFIAMM.)", defaultDosage: 'DOSE 1.5KG' },
+  { id: 'gastrovom', name: "GASTROVOM (GASTROPROTE.)", defaultDosage: '1 ML' },
+  { id: 'urys', name: "URYS (INTEGRITA' MUCOSA)", defaultDosage: '0.5 ML', options: ['0.5 ML', '1 ML'] },
+  { id: 'drenalase', name: "DRENALASE PET MINI", defaultDosage: '1 cp/gg' }
 ];
 
 function LogMedicine() {
   const navigate = useNavigate();
-  // Initialize state
   const [items, setItems] = useState(() => {
     const initial = {};
     PRESETS.forEach(p => {
@@ -59,7 +58,7 @@ function LogMedicine() {
     }
 
     if (selectedMedicines.length === 0) {
-      alert('Seleziona almeno una medicina o inseriscine una manuale.');
+      alert("Seleziona almeno una medicina o inseriscine una manuale.");
       return;
     }
 
@@ -80,7 +79,7 @@ function LogMedicine() {
       navigate('/');
     } catch (err) {
       console.error(err);
-      alert('Errore nel salvataggio');
+      alert("Errore nel salvataggio");
     }
   };
 

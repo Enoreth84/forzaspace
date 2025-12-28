@@ -1,11 +1,15 @@
 import { Link } from 'react-router-dom';
-import { useLiveQuery } from 'dexie-react-hooks';
+import { useState, useEffect } from 'react';
 import { db, LogType } from '../services/db';
 
 function Home() {
-  const recentLogs = useLiveQuery(() => 
+  const [recentLogs, setRecentLogs] = useState([]);
+
+  useEffect(() => {
     db.logs.orderBy('timestamp').reverse().limit(5).toArray()
-  );
+      .then(setRecentLogs)
+      .catch(console.error);
+  }, []);
 
   const formatLog = (log) => {
     const time = new Date(log.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -13,27 +17,26 @@ function Home() {
     
     switch(log.type) {
       case LogType.MEDICINE:
-        // Handle new object structure or old string
         const medName = typeof log.details === 'object' ? log.details.name : log.details;
-        const medDose = typeof log.details === 'object' ? \ (\)\ : '';
-        content = \ \\\;
+        const medDose = typeof log.details === 'object' ? ` (${log.details.dosage})` : '';
+        content = ` ${medName}${medDose}`;
         break;
       case LogType.PEE:
-        content = \ Pipì \\;
+        content = ` Pipì ${log.details.blood ? ' Sangue' : ''}`;
         break;
       case LogType.POO:
-        content = \ Pupù (\)\;
+        content = ` Pupù (${log.details.consistency})`;
         break;
       case LogType.MOOD:
-        content = \ Mood: \\;
+        content = ` Mood: ${log.details}`;
         break;
       case LogType.WEIGHT:
-         content = \ Peso: \ kg\;
+         content = ` Peso: ${log.details} kg`;
         break;
       default:
         content = ' Nota';
     }
-    return \\ - \\;
+    return `${time} - ${content}`;
   };
 
   return (
