@@ -11,7 +11,8 @@ export const LogType = {
   PEE: 'pee',
   POO: 'poo',
   MOOD: 'mood',
-  WEIGHT: 'weight'
+  WEIGHT: 'weight',
+  FOOD: 'food'
 };
 
 // Export all data to JSON

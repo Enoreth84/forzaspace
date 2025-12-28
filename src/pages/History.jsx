@@ -17,6 +17,8 @@ function History() {
         const medName = typeof log.details === 'object' ? log.details.name : log.details;
         const medDose = typeof log.details === 'object' ? ` (${log.details.dosage})` : '';
         return ` ${medName}${medDose}`;
+      case LogType.FOOD:
+        return ` ${log.details.name} (${log.details.quantity})`;
       case LogType.PEE:
         return ` Pipì ${log.details.blood ? ' Sangue' : ''}`;
       case LogType.POO:

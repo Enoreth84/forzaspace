@@ -62,9 +62,9 @@ function EditLog() {
     switch(log.type) {
       case LogType.MEDICINE:
          // Handle both old string format and new object format
-         const isObj = typeof details === 'object';
-         const name = isObj ? details.name : details;
-         const dosage = isObj ? details.dosage : '';
+         const isMedObj = typeof details === 'object';
+         const medName = isMedObj ? details.name : details;
+         const dosage = isMedObj ? details.dosage : '';
 
          return (
            <>
@@ -73,10 +73,10 @@ function EditLog() {
                type="text" 
                className="input-field" 
                style={{ width: '100%', padding: '0.5rem', marginBottom: '1rem' }}
-               value={name}
-               onChange={e => setDetails(isObj ? { ...details, name: e.target.value } : e.target.value)}
+               value={medName}
+               onChange={e => setDetails(isMedObj ? { ...details, name: e.target.value } : e.target.value)}
              />
-             {isObj && (
+             {isMedObj && (
                <>
                  <label>Dosaggio:</label>
                  <input 
@@ -90,6 +90,28 @@ function EditLog() {
              )}
            </>
          );
+
+      case LogType.FOOD:
+        return (
+          <>
+            <label>Nome Cibo:</label>
+            <input 
+              type="text" 
+              className="input-field" 
+              style={{ width: '100%', padding: '0.5rem', marginBottom: '1rem' }}
+              value={details.name}
+              onChange={e => setDetails({ ...details, name: e.target.value })}
+            />
+            <label>Quantità:</label>
+            <input 
+              type="text" 
+              className="input-field" 
+              style={{ width: '100%', padding: '0.5rem' }}
+              value={details.quantity}
+              onChange={e => setDetails({ ...details, quantity: e.target.value })}
+            />
+          </>
+        );
       
       case LogType.WEIGHT:
         return (

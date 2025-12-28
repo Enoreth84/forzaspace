@@ -21,6 +21,9 @@ function Home() {
         const medDose = typeof log.details === 'object' ? ` (${log.details.dosage})` : '';
         content = ` ${medName}${medDose}`;
         break;
+      case LogType.FOOD:
+        content = ` ${log.details.name} (${log.details.quantity})`;
+        break;
       case LogType.PEE:
         content = ` Pipì ${log.details.blood ? ' Sangue' : ''}`;
         break;
@@ -50,6 +53,10 @@ function Home() {
         <Link to="/log/medicine" className="card action-card">
           <span style={{ fontSize: '2rem' }}></span>
           <span>Medicine</span>
+        </Link>
+        <Link to="/log/food" className="card action-card">
+          <span style={{ fontSize: '2rem' }}></span>
+          <span>Cibo</span>
         </Link>
         <Link to="/log/excretion" className="card action-card">
           <span style={{ fontSize: '2rem' }}></span>
@@ -88,4 +95,3 @@ function Home() {
 }
 
 export default Home;
-
