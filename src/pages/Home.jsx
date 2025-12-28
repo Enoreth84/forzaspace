@@ -1,132 +1,87 @@
-import React from 'react';
+import { Link } from 'react-router-dom';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { db, LogType } from '../services/db';
-import { Pill, Droplets, Smile, Scale, AlertTriangle, Clock, Trash2 } from 'lucide-react';
 
-export default function Home() {
-    const logs = useLiveQuery(() => db.logs.orderBy('timestamp').reverse().limit(20).toArray());
+function Home() {
+  const recentLogs = useLiveQuery(() => 
+    db.logs.orderBy('timestamp').reverse().limit(5).toArray()
+  );
 
-    const deleteLog = (id) => {
-        if (confirm('Eliminare questo evento?')) {
-            db.logs.delete(id);
-        }
-    };
-
-    const getIcon = (type) => {
-        switch (type) {
-            case LogType.MEDICINE: return <Pill size={20} color="var(--color-medicine)" />;
-            case LogType.PEE: return <Droplets size={20} color="var(--color-pee)" />;
-            case LogType.POO: return <div style={{ fontSize: '20px' }}>ðŸ’©</div>;
-            case LogType.MOOD: return <Smile size={20} color="var(--color-mood)" />;
-            case LogType.WEIGHT: return <Scale size={20} color="var(--color-weight)" />;
-            default: return <Clock size={20} />;
-        }
-    };
-
-    const renderDetails = (log) => {
-        switch (log.type) {
-            case LogType.MEDICINE:
-                return <span><b>{log.details.name}</b> {log.details.dosage && `(${log.details.dosage})`}</span>;
-            case LogType.PEE:
-                return (
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <span>PipÃ¬</span>
-                        {log.details.hasBlood && (
-                            <span style={{ color: 'var(--color-error)', display: 'flex', alignItems: 'center', fontSize: '0.8rem', fontWeight: 'bold' }}>
-                                <AlertTriangle size={14} /> Sangue
-                            </span>
-                        )}
-                        {log.photo && <span style={{ fontSize: '0.8rem', color: 'var(--color-text-secondary)' }}>ðŸ“· Foto</span>}
-                    </div>
-                );
-            case LogType.POO:
-                return (
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <span>Cacca</span>
-                        {log.details.consistency && <span style={{ color: 'var(--color-text-secondary)' }}>- {log.details.consistency}</span>}
-                        {log.photo && <span style={{ fontSize: '0.8rem', color: 'var(--color-text-secondary)' }}>ðŸ“· Foto</span>}
-                    </div>
-                );
-            case LogType.MOOD:
-                return (
-                    <div>
-                        <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
-                            {log.details.moods?.map(m => (
-                                <span key={m} style={{ background: 'var(--color-bg-secondary)', padding: '2px 6px', borderRadius: '4px', fontSize: '0.8rem' }}>
-                                    {m}
-                                </span>
-                            ))}
-                        </div>
-                        {log.details.note && <div style={{ fontSize: '0.8rem', color: 'var(--color-text-secondary)', marginTop: '4px' }}>"{log.details.note}"</div>}
-                    </div>
-                );
-            case LogType.WEIGHT:
-                return <span><b>{log.details.weight}</b> kg</span>;
-            default:
-                return null;
-        }
-    };
-
-    const formatDate = (timestamp) => {
-        const date = new Date(timestamp);
-        return date.toLocaleDateString('it-IT', { day: 'numeric', month: 'short' });
+  const formatLog = (log) => {
+    const time = new Date(log.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    let content = '';
+    
+    switch(log.type) {
+      case LogType.MEDICINE:
+        // Handle new object structure or old string
+        const medName = typeof log.details === 'object' ? log.details.name : log.details;
+        const medDose = typeof log.details === 'object' ? \ (\)\ : '';
+        content = \ \\\;
+        break;
+      case LogType.PEE:
+        content = \ Pipì \\;
+        break;
+      case LogType.POO:
+        content = \ Pupù (\)\;
+        break;
+      case LogType.MOOD:
+        content = \ Mood: \\;
+        break;
+      case LogType.WEIGHT:
+         content = \ Peso: \ kg\;
+        break;
+      default:
+        content = ' Nota';
     }
+    return \\ - \\;
+  };
 
-    const formatTime = (timestamp) => {
-        const date = new Date(timestamp);
-        return date.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
-    }
+  return (
+    <div className="page-container">
+      <header style={{ marginBottom: '2rem', textAlign: 'center' }}>
+        <h1 style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>Cat Log </h1>
+        <p style={{ color: '#666' }}>Benvenuto nel diario del tuo gatto</p>
+      </header>
+      
+      <div className="grid-container">
+        <Link to="/log/medicine" className="card action-card">
+          <span style={{ fontSize: '2rem' }}></span>
+          <span>Medicine</span>
+        </Link>
+        <Link to="/log/excretion" className="card action-card">
+          <span style={{ fontSize: '2rem' }}></span>
+          <span>Bisogni</span>
+        </Link>
+        <Link to="/log/mood" className="card action-card">
+          <span style={{ fontSize: '2rem' }}></span>
+          <span>Umore</span>
+        </Link>
+        <Link to="/log/weight" className="card action-card">
+          <span style={{ fontSize: '2rem' }}></span>
+          <span>Peso</span>
+        </Link>
+        <Link to="/settings" className="card action-card" style={{ gridColumn: '1 / -1', background: '#f8f9fa' }}>
+            <span style={{ fontSize: '2rem' }}></span>
+            <span>Impostazioni & Backup</span>
+        </Link>
+      </div>
 
-    return (
-        <div>
-            <div className="page-header">
-                <h1 className="page-title">Panoramica</h1>
-                <p style={{ color: 'var(--color-text-secondary)' }}>Ecco come sta il tuo gatto oggi</p>
-            </div>
-
-            <div style={{ marginBottom: '1.5rem' }}>
-                <h2 style={{ fontSize: '1.1rem', marginBottom: '1rem' }}>AttivitÃ  Recenti</h2>
-
-                {!logs || logs.length === 0 ? (
-                    <div className="card" style={{ textAlign: 'center', color: 'var(--color-text-secondary)', padding: '2rem' }}>
-                        <p>Nessuna attivitÃ  registrata ancora.</p>
-                        <p style={{ fontSize: '0.9rem', marginTop: '0.5rem' }}>Usa il menu in basso per iniziare.</p>
-                    </div>
-                ) : (
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                        {logs.map(log => (
-                            <div key={log.id} className="card" style={{ padding: '0.75rem 1rem', display: 'flex', alignItems: 'flex-start', gap: '12px', marginBottom: 0 }}>
-                                <div style={{ flexShrink: 0, marginTop: '2px' }}>
-                                    {getIcon(log.type)}
-                                </div>
-                                <div style={{ flex: 1 }}>
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
-                                        <span style={{ fontSize: '0.8rem', color: 'var(--color-text-secondary)' }}>
-                                            {formatDate(log.timestamp)} â€¢ {formatTime(log.timestamp)}
-                                        </span>
-                                        <button onClick={() => deleteLog(log.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#cbd5e1' }}>
-                                            <Trash2 size={16} />
-                                        </button>
-                                    </div>
-                                    <div>
-                                        {renderDetails(log)}
-                                    </div>
-                                    {log.photo && (
-                                        <div style={{ marginTop: '8px', borderRadius: '8px', overflow: 'hidden', maxHeight: '150px' }}>
-                                            <img
-                                                src={URL.createObjectURL(log.photo)}
-                                                alt="Log"
-                                                style={{ width: '100%', objectFit: 'cover' }}
-                                                onLoad={(e) => URL.revokeObjectURL(e.target.src)}
-                                            />
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                )}
-            </div>
-        </div>
-    );
+      <div className="card" style={{ marginTop: '2rem' }}>
+        <h3>Ultime Attività</h3>
+        <ul style={{ listStyle: 'none', padding: 0 }}>
+          {recentLogs?.map(log => (
+            <li key={log.id} style={{ padding: '0.5rem 0', borderBottom: '1px solid #eee' }}>
+              {formatLog(log)}
+            </li>
+          ))}
+          {!recentLogs?.length && <li style={{ color: '#999', fontStyle: 'italic' }}>Nessuna attività recente</li>}
+        </ul>
+        <Link to="/history" style={{ display: 'block', marginTop: '1rem', textAlign: 'center', color: 'var(--primary-color)' }}>
+          Vedi tutto lo storico
+        </Link>
+      </div>
+    </div>
+  );
 }
+
+export default Home;

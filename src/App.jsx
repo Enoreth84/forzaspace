@@ -1,28 +1,21 @@
-import React from 'react';
-import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
-import MainLayout from './layouts/MainLayout';
-
-// Placeholder pages (will replace later)
+import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
-import LogMedicine from './pages/LogMedicine';
 import LogExcretion from './pages/LogExcretion';
 import LogMood from './pages/LogMood';
-import LogWeight from './pages/LogWeight';
+import LogMedicine from './pages/LogMedicine';
+import Settings from './pages/Settings';
 
 function App() {
   return (
-    <HashRouter>
+    <Router>
       <Routes>
-        <Route path="/" element={<MainLayout />}>
-          <Route index element={<Home />} />
-          <Route path="log/medicine" element={<LogMedicine />} />
-          <Route path="log/excretion" element={<LogExcretion />} />
-          <Route path="log/mood" element={<LogMood />} />
-          <Route path="log/weight" element={<LogWeight />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Route>
+        <Route path="/" element={<Home />} />
+        <Route path="/log/excretion" element={<LogExcretion />} />
+        <Route path="/log/mood" element={<LogMood />} />
+        <Route path="/log/medicine" element={<LogMedicine />} />
+        <Route path="/settings" element={<Settings />} />
       </Routes>
-    </HashRouter>
+    </Router>
   );
 }
 

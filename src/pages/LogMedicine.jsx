@@ -1,110 +1,174 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { db, LogType } from '../services/db';
-import { Pill, Clock, Syringe } from 'lucide-react';
 
-export default function LogMedicine() {
-    const navigate = useNavigate();
-    const [formData, setFormData] = useState({
-        name: '',
-        dosage: '',
-        date: new Date().toISOString().split('T')[0],
-        time: new Date().toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' })
+const PRESETS = [
+  { id: 'evexia', name: 'EVEXIA FAST (ANTIDOLORIFICO)', defaultDosage: '0.25 ML' },
+  { id: 'semintra', name: 'SEMINTRA (INSUFF. RENALE)', defaultDosage: 'DOSE 3KG' },
+  { id: 'deflacam', name: 'DEFLACAM (ANTINFIAMM.)', defaultDosage: 'DOSE 1.5KG' },
+  { id: 'gastrovom', name: 'GASTROVOM (GASTROPROTE.)', defaultDosage: '1 ML' },
+  { id: 'urys', name: 'URYS (INTEGRITA\' MUCOSA)', defaultDosage: '0.5 ML', options: ['0.5 ML', '1 ML'] }
+];
+
+function LogMedicine() {
+  const navigate = useNavigate();
+  // Initialize state: map preset IDs to { selected: false, dosage: default }
+  const [items, setItems] = useState(() => {
+    const initial = {};
+    PRESETS.forEach(p => {
+      initial[p.id] = { selected: false, dosage: p.defaultDosage };
+    });
+    return initial;
+  });
+  
+  const [customName, setCustomName] = useState('');
+  const [customDosage, setCustomDosage] = useState('');
+
+  const toggleItem = (id) => {
+    setItems(prev => ({
+      ...prev,
+      [id]: { ...prev[id], selected: !prev[id].selected }
+    }));
+  };
+
+  const updateDosage = (id, newDosage) => {
+    setItems(prev => ({
+      ...prev,
+      [id]: { ...prev[id], dosage: newDosage }
+    }));
+  };
+
+  const saveLog = async () => {
+    const selectedMedicines = [];
+    
+    // Add selected presets
+    PRESETS.forEach(p => {
+      if (items[p.id].selected) {
+        selectedMedicines.push({
+          name: p.name,
+          dosage: items[p.id].dosage
+        });
+      }
     });
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            if (!formData.name) return;
+    // Add custom medicine if filled
+    if (customName.trim()) {
+      selectedMedicines.push({
+        name: customName,
+        dosage: customDosage || 'N/A'
+      });
+    }
 
-            const logDate = new Date(`${formData.date}T${formData.time}`);
+    if (selectedMedicines.length === 0) {
+      alert('Seleziona almeno una medicina o inseriscine una manuale.');
+      return;
+    }
 
-            await db.logs.add({
-                type: LogType.MEDICINE,
-                timestamp: logDate.getTime(),
-                date: formData.date,
-                details: {
-                    name: formData.name,
-                    dosage: formData.dosage
-                }
-            });
-
-            navigate('/');
-        } catch (error) {
-            console.error("Failed to save log:", error);
-            alert("Errore nel salvataggio");
+    // Save each medicine as a separate log entry or combined?
+    // Usually combined details are better but db structure supports single 'details'.
+    // Let's modify db schema slightly in mind or just save array in 'details'.
+    // Existing schema: details: { name, dosage }
+    // We should save multiple entries or one entry with multiple meds.
+    // Saving multiple entries is safer for querying "When did he take Evexia?"
+    
+    try {
+      await db.transaction('rw', db.logs, async () => {
+        const now = Date.now();
+        const dateStr = new Date().toISOString().split('T')[0];
+        
+        for (const med of selectedMedicines) {
+          await db.logs.add({
+            type: LogType.MEDICINE,
+            timestamp: now,
+            date: dateStr,
+            details: med
+          });
         }
-    };
+      });
+      navigate('/');
+    } catch (err) {
+      console.error(err);
+      alert('Errore nel salvataggio');
+    }
+  };
 
-    return (
-        <div>
-            <div className="page-header">
-                <h1 className="page-title">Registra Medicina</h1>
+  return (
+    <div className="page-container">
+      <h1>Registra Medicina </h1>
+      
+      <div className="card">
+        <h3>Lista Prescritta</h3>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+          {PRESETS.map(p => (
+            <div key={p.id} style={{ 
+              display: 'flex', 
+              flexDirection: 'column', 
+              padding: '0.5rem', 
+              border: items[p.id].selected ? '2px solid var(--primary-color)' : '1px solid #ddd',
+              borderRadius: '8px',
+              backgroundColor: items[p.id].selected ? 'rgba(var(--primary-rgb), 0.05)' : 'transparent'
+            }}>
+              <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 'bold', cursor: 'pointer' }}>
+                <input 
+                  type="checkbox" 
+                  checked={items[p.id].selected} 
+                  onChange={() => toggleItem(p.id)}
+                  style={{ transform: 'scale(1.2)' }}
+                />
+                {p.name}
+              </label>
+              
+              {items[p.id].selected && (
+                <div style={{ marginTop: '0.5rem', marginLeft: '1.8rem' }}>
+                  <label style={{ fontSize: '0.9rem', color: '#666' }}>Dosaggio:</label>
+                  {p.options ? (
+                     <select 
+                       value={items[p.id].dosage} 
+                       onChange={(e) => updateDosage(p.id, e.target.value)}
+                       style={{ width: '100%', padding: '0.5rem', marginTop: '0.2rem' }}
+                     >
+                       {p.options.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+                     </select>
+                  ) : (
+                    <input 
+                      type="text" 
+                      value={items[p.id].dosage}
+                      onChange={(e) => updateDosage(p.id, e.target.value)}
+                      style={{ width: '100%', padding: '0.5rem', marginTop: '0.2rem' }}
+                    />
+                  )}
+                </div>
+              )}
             </div>
-
-            <form onSubmit={handleSubmit} className="card">
-                <div className="input-group">
-                    <label className="input-label">Nome Medicina</label>
-                    <div style={{ position: 'relative' }}>
-                        <Pill size={18} style={{ position: 'absolute', top: '12px', left: '10px', color: 'var(--color-text-secondary)' }} />
-                        <input
-                            type="text"
-                            className="input-control"
-                            style={{ paddingLeft: '36px' }}
-                            value={formData.name}
-                            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                            placeholder="Es. Antibiotico"
-                            required
-                        />
-                    </div>
-                </div>
-
-                <div className="input-group">
-                    <label className="input-label">Dosaggio (Opzionale)</label>
-                    <div style={{ position: 'relative' }}>
-                        <Syringe size={18} style={{ position: 'absolute', top: '12px', left: '10px', color: 'var(--color-text-secondary)' }} />
-                        <input
-                            type="text"
-                            className="input-control"
-                            style={{ paddingLeft: '36px' }}
-                            value={formData.dosage}
-                            onChange={(e) => setFormData({ ...formData, dosage: e.target.value })}
-                            placeholder="Es. 1 pillola / 5ml"
-                        />
-                    </div>
-                </div>
-
-                <div className="input-group" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-                    <div>
-                        <label className="input-label">Data</label>
-                        <input
-                            type="date"
-                            className="input-control"
-                            value={formData.date}
-                            onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                            required
-                        />
-                    </div>
-                    <div>
-                        <label className="input-label">Ora</label>
-                        <div style={{ position: 'relative' }}>
-                            <Clock size={16} style={{ position: 'absolute', top: '12px', left: '10px', color: 'var(--color-text-secondary)' }} />
-                            <input
-                                type="time"
-                                className="input-control"
-                                style={{ paddingLeft: '32px' }}
-                                value={formData.time}
-                                onChange={(e) => setFormData({ ...formData, time: e.target.value })}
-                                required
-                            />
-                        </div>
-                    </div>
-                </div>
-
-                <button type="submit" className="btn btn-primary" style={{ width: '100%', marginTop: '1rem' }}>
-                    Salva Medicina
-                </button>
-            </form>
+          ))}
         </div>
-    );
+
+        <h3 style={{ marginTop: '1.5rem' }}>Altro / Manuale</h3>
+        <input 
+          type="text" 
+          placeholder="Nome Medicina" 
+          value={customName}
+          onChange={(e) => setCustomName(e.target.value)}
+          style={{ width: '100%', marginBottom: '0.5rem' }}
+        />
+        <input 
+          type="text" 
+          placeholder="Dosaggio" 
+          value={customDosage}
+          onChange={(e) => setCustomDosage(e.target.value)}
+          style={{ width: '100%' }}
+        />
+
+        <button 
+          onClick={saveLog} 
+          className="action-button"
+          style={{ marginTop: '1.5rem' }}
+        >
+          Salva Medicine
+        </button>
+      </div>
+    </div>
+  );
 }
+
+export default LogMedicine;
