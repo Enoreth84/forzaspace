@@ -44,9 +44,11 @@ function History() {
                 borderBottom: '1px solid #eee',
                 display: 'flex',
                 justifyContent: 'space-between',
-                alignItems: 'center'
+                alignItems: 'center',
+                flexWrap: 'wrap',
+                gap: '0.5rem'
               }}>
-                <div>
+                <div style={{ flex: 1 }}>
                   <div style={{ fontSize: '0.85rem', color: '#666' }}>
                     {new Date(log.timestamp).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' })}
                   </div>
@@ -54,8 +56,16 @@ function History() {
                     {formatDetails(log)}
                   </div>
                 </div>
-                <Link to={`/edit/${log.id}`} style={{ textDecoration: 'none', fontSize: '1.2rem', padding: '0.5rem' }}>
-                  
+                <Link to={`/edit/${log.id}`} style={{ 
+                   textDecoration: 'none', 
+                   fontSize: '0.9rem', 
+                   padding: '0.4rem 0.8rem',
+                   backgroundColor: '#f0f0f0',
+                   borderRadius: '6px',
+                   border: '1px solid #ddd',
+                   color: '#333'
+                }}>
+                   Modifica
                 </Link>
               </li>
             ))}

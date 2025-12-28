@@ -85,15 +85,26 @@ function Home() {
         <ul style={{ listStyle: 'none', padding: 0 }}>
           {recentLogs?.map(log => (
             <li key={log.id} style={{ 
-              padding: '0.5rem 0', 
+              padding: '0.8rem 0', 
               borderBottom: '1px solid #eee',
               display: 'flex',
               justifyContent: 'space-between',
-              alignItems: 'center'
+              alignItems: 'center',
+              flexWrap: 'wrap',
+              gap: '0.5rem'
             }}>
-              <span>{formatLog(log)}</span>
-              <Link to={`/edit/${log.id}`} style={{ textDecoration: 'none', fontSize: '1rem', padding: '0.2rem 0.5rem' }}>
-                
+              <span style={{ flex: 1 }}>{formatLog(log)}</span>
+              <Link to={`/edit/${log.id}`} style={{ 
+                textDecoration: 'none', 
+                fontSize: '0.9rem', 
+                padding: '0.3rem 0.6rem',
+                backgroundColor: '#f0f0f0',
+                borderRadius: '6px',
+                border: '1px solid #ddd',
+                color: '#333',
+                whiteSpace: 'nowrap'
+              }}>
+                 Modifica
               </Link>
             </li>
           ))}
