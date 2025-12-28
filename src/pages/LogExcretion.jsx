@@ -4,23 +4,34 @@ import { db, LogType } from '../services/db';
 
 function LogExcretion() {
   const navigate = useNavigate();
-  const [type, setType] = useState(LogType.PEE);
-  const [hasBlood, setHasBlood] = useState(false);
-  const [consistency, setConsistency] = useState('Normale');
+  const [type, setType] = useState('pee'); // 'pee' or 'poo'
+  const [details, setDetails] = useState({});
+  const [photo, setPhoto] = useState(null);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handlePhotoChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPhoto(reader.result); // Base64 string
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const saveLog = async () => {
+    const logData = {
+      type: type === 'pee' ? LogType.PEE : LogType.POO,
+      timestamp: Date.now(),
+      date: new Date().toISOString().split('T')[0],
+      details: {
+        ...details,
+        photo: photo // Add photo to details
+      }
+    };
+
     try {
-      const details = type === LogType.PEE 
-        ? { blood: hasBlood }
-        : { consistency };
-
-      await db.logs.add({
-        type,
-        timestamp: Date.now(),
-        date: new Date().toISOString().split('T')[0],
-        details
-      });
+      await db.logs.add(logData);
       navigate('/');
     } catch (err) {
       console.error(err);
@@ -30,63 +41,76 @@ function LogExcretion() {
 
   return (
     <div className="page-container">
-      <h1>Bisogni </h1>
+      <h1>Log Bisogni </h1>
       
-      <div className="card" style={{ marginBottom: '1rem' }}>
-        <div style={{ display: 'flex', gap: '0.5rem' }}>
+      <div className="card">
+        <div style={{ display: 'flex', gap: '1rem', marginBottom: '1.5rem' }}>
           <button 
-            type="button" 
-            onClick={() => setType(LogType.PEE)}
-            className={type === LogType.PEE ? 'action-button' : 'card'}
-            style={{ flex: 1, border: type === LogType.PEE ? 'none' : '1px solid #ddd' }}
+            className={`action-button ${type === 'pee' ? '' : 'outline'}`}
+            style={{ backgroundColor: type === 'pee' ? 'var(--primary-color)' : '#f0f0f0', color: type === 'pee' ? 'white' : 'black' }}
+            onClick={() => { setType('pee'); setDetails({}); }}
           >
              Pipì
           </button>
           <button 
-            type="button" 
-            onClick={() => setType(LogType.POO)}
-            className={type === LogType.POO ? 'action-button' : 'card'}
-            style={{ flex: 1, border: type === LogType.POO ? 'none' : '1px solid #ddd', backgroundColor: type === LogType.POO ? 'var(--color-poo)' : '' }}
+            className={`action-button ${type === 'poo' ? '' : 'outline'}`}
+            style={{ backgroundColor: type === 'poo' ? 'var(--primary-color)' : '#f0f0f0', color: type === 'poo' ? 'white' : 'black' }}
+            onClick={() => { setType('poo'); setDetails({}); }}
           >
              Pupù
           </button>
         </div>
-      </div>
 
-      <form onSubmit={handleSubmit} className="card">
-        {type === LogType.PEE ? (
-          <label style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '1rem', fontSize: '1.2rem' }}>
-            <input 
-              type="checkbox" 
-              checked={hasBlood} 
-              onChange={(e) => setHasBlood(e.target.checked)}
-              style={{ transform: 'scale(1.5)' }}
-            />
-            C'è sangue? 
-          </label>
-        ) : (
-          <div>
-             <label>Consistenza:</label>
-             <select 
-               value={consistency} 
-               onChange={(e) => setConsistency(e.target.value)}
-               style={{ width: '100%', padding: '0.8rem', marginTop: '0.5rem' }}
-             >
-               <option>Normale</option>
-               <option>Dura</option>
-               <option>Molle</option>
-               <option>Liquida</option>
-             </select>
+        {type === 'pee' && (
+           <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem', fontSize: '1.1rem' }}>
+             <input 
+               type="checkbox" 
+               checked={details.blood || false} 
+               onChange={e => setDetails({...details, blood: e.target.checked})}
+               style={{ transform: 'scale(1.3)' }}
+             />
+             C'è sangue? 
+           </label>
+        )}
+
+        {type === 'poo' && (
+          <div style={{ marginBottom: '1rem' }}>
+            <label style={{ display: 'block', marginBottom: '0.5rem' }}>Consistenza:</label>
+            <select 
+              className="input-field"
+              style={{ width: '100%', padding: '0.8rem' }}
+              value={details.consistency || 'Normale'}
+              onChange={e => setDetails({...details, consistency: e.target.value})}
+            >
+              <option>Normale</option>
+              <option>Dura</option>
+              <option>Molle</option>
+              <option>Liquida</option>
+            </select>
           </div>
         )}
-        
-        <button type="submit" className="action-button" style={{ marginTop: '1.5rem' }}>
-          Salva {type === LogType.PEE ? 'Pipì' : 'Pupù'}
-        </button>
-      </form>
+
+        <div style={{ marginBottom: '1.5rem', borderTop: '1px solid #eee', paddingTop: '1rem' }}>
+          <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}> Foto (Opzionale):</label>
+          <input 
+            type="file" 
+            accept="image/*" 
+            capture="environment"
+            onChange={handlePhotoChange}
+            style={{ width: '100%' }}
+          />
+          {photo && (
+            <div style={{ marginTop: '0.5rem' }}>
+              <img src={photo} alt="Anteprima" style={{ maxWidth: '100%', maxHeight: '200px', borderRadius: '8px', border: '1px solid #ddd' }} />
+              <button onClick={() => setPhoto(null)} style={{ display: 'block', marginTop: '0.5rem', padding: '0.3rem', background: '#ffebee', border: '1px solid #ffcdd2', borderRadius: '4px', color: '#d32f2f' }}>Rimuovi foto</button>
+            </div>
+          )}
+        </div>
+
+        <button onClick={saveLog} className="action-button">Salva</button>
+      </div>
     </div>
   );
 }
 
 export default LogExcretion;
-

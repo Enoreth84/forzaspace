@@ -56,6 +56,17 @@ function EditLog() {
     }
   };
 
+  const handlePhotoChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setDetails({ ...details, photo: reader.result });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const renderDetailInputs = () => {
     if (!log) return null;
 
@@ -90,7 +101,7 @@ function EditLog() {
              )}
            </>
          );
-
+      
       case LogType.FOOD:
         return (
           <>
@@ -112,7 +123,7 @@ function EditLog() {
             />
           </>
         );
-      
+
       case LogType.WEIGHT:
         return (
           <>
@@ -148,20 +159,33 @@ function EditLog() {
 
       case LogType.PEE:
         return (
-           <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-             <input 
-               type="checkbox" 
-               checked={details.blood || false}
-               onChange={e => setDetails({ ...details, blood: e.target.checked })}
-               style={{ transform: 'scale(1.2)' }}
-             />
-             C'è sangue?
-           </label>
+           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+             <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+               <input 
+                 type="checkbox" 
+                 checked={details.blood || false}
+                 onChange={e => setDetails({ ...details, blood: e.target.checked })}
+                 style={{ transform: 'scale(1.2)' }}
+               />
+               C'è sangue?
+             </label>
+
+             <div style={{ borderTop: '1px solid #eee', paddingTop: '1rem' }}>
+               <label style={{ fontWeight: 'bold', display: 'block', marginBottom: '0.5rem' }}>Foto:</label>
+               {details.photo && (
+                  <div style={{ marginBottom: '0.5rem' }}>
+                    <img src={details.photo} alt="Log" style={{ maxWidth: '100%', maxHeight: '200px', borderRadius: '8px', border: '1px solid #ddd' }} />
+                    <button onClick={() => setDetails({...details, photo: null})} style={{ display: 'block', marginTop: '0.5rem', color: 'red' }}>Rimuovi</button>
+                  </div>
+               )}
+               <input type="file" accept="image/*" onChange={handlePhotoChange} />
+             </div>
+           </div>
         );
 
       case LogType.POO:
         return (
-          <>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
              <label>Consistenza:</label>
              <select 
                className="input-field"
@@ -174,7 +198,18 @@ function EditLog() {
                <option>Molle</option>
                <option>Liquida</option>
              </select>
-          </>
+
+             <div style={{ borderTop: '1px solid #eee', paddingTop: '1rem' }}>
+               <label style={{ fontWeight: 'bold', display: 'block', marginBottom: '0.5rem' }}>Foto:</label>
+               {details.photo && (
+                  <div style={{ marginBottom: '0.5rem' }}>
+                    <img src={details.photo} alt="Log" style={{ maxWidth: '100%', maxHeight: '200px', borderRadius: '8px', border: '1px solid #ddd' }} />
+                    <button onClick={() => setDetails({...details, photo: null})} style={{ display: 'block', marginTop: '0.5rem', color: 'red' }}>Rimuovi</button>
+                  </div>
+               )}
+               <input type="file" accept="image/*" onChange={handlePhotoChange} />
+             </div>
+          </div>
         );
 
       default:

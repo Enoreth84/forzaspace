@@ -14,6 +14,7 @@ function Home() {
   const formatLog = (log) => {
     const time = new Date(log.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     let content = '';
+    const hasPhoto = log.details && log.details.photo;
     
     switch(log.type) {
       case LogType.MEDICINE:
@@ -37,9 +38,15 @@ function Home() {
          content = ` Peso: ${log.details} kg`;
         break;
       default:
-        content = '� Nota';
+        content = ' Nota';
     }
-    return `${time} - ${content}`;
+    
+    return (
+      <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+        {time} - {content}
+        {hasPhoto && <span style={{ fontSize: '1.2rem' }} title="Foto allegata"></span>}
+      </span>
+    );
   };
 
   return (
@@ -93,7 +100,7 @@ function Home() {
               flexWrap: 'wrap',
               gap: '0.5rem'
             }}>
-              <span style={{ flex: 1 }}>{formatLog(log)}</span>
+              <div style={{ flex: 1 }}>{formatLog(log)}</div>
               <Link to={`/edit/${log.id}`} style={{ 
                 textDecoration: 'none', 
                 fontSize: '0.9rem', 

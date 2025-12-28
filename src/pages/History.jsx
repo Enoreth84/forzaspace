@@ -38,37 +38,41 @@ function History() {
       <div className="card">
         {logs.length === 0 ? <p>Nessun dato registrato.</p> : (
           <ul style={{ listStyle: 'none', padding: 0 }}>
-            {logs.map(log => (
-              <li key={log.id} style={{ 
-                padding: '1rem 0', 
-                borderBottom: '1px solid #eee',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                flexWrap: 'wrap',
-                gap: '0.5rem'
-              }}>
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: '0.85rem', color: '#666' }}>
-                    {new Date(log.timestamp).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' })}
-                  </div>
-                  <div style={{ fontWeight: '500', marginTop: '0.2rem' }}>
-                    {formatDetails(log)}
-                  </div>
-                </div>
-                <Link to={`/edit/${log.id}`} style={{ 
-                   textDecoration: 'none', 
-                   fontSize: '0.9rem', 
-                   padding: '0.4rem 0.8rem',
-                   backgroundColor: '#f0f0f0',
-                   borderRadius: '6px',
-                   border: '1px solid #ddd',
-                   color: '#333'
+            {logs.map(log => {
+               const hasPhoto = log.details && log.details.photo;
+               return (
+                <li key={log.id} style={{ 
+                  padding: '1rem 0', 
+                  borderBottom: '1px solid #eee',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  flexWrap: 'wrap',
+                  gap: '0.5rem'
                 }}>
-                   Modifica
-                </Link>
-              </li>
-            ))}
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontSize: '0.85rem', color: '#666' }}>
+                      {new Date(log.timestamp).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' })}
+                    </div>
+                    <div style={{ fontWeight: '500', marginTop: '0.2rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                      {formatDetails(log)}
+                      {hasPhoto && <span style={{ fontSize: '1.2rem' }} title="Foto allegata"></span>}
+                    </div>
+                  </div>
+                  <Link to={`/edit/${log.id}`} style={{ 
+                     textDecoration: 'none', 
+                     fontSize: '0.9rem', 
+                     padding: '0.4rem 0.8rem',
+                     backgroundColor: '#f0f0f0',
+                     borderRadius: '6px',
+                     border: '1px solid #ddd',
+                     color: '#333'
+                  }}>
+                     Modifica
+                  </Link>
+                </li>
+               );
+            })}
           </ul>
         )}
       </div>
