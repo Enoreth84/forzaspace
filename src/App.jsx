@@ -1,4 +1,4 @@
-import { HashRouter as Router, Routes, Route } from 'react-router-dom';
+﻿import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import LogExcretion from './pages/LogExcretion';
 import LogMood from './pages/LogMood';
@@ -22,3 +22,4 @@ function App() {
 }
 
 export default App;
+

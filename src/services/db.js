@@ -1,4 +1,4 @@
-import Dexie from 'dexie';
+﻿import Dexie from 'dexie';
 
 export const db = new Dexie('CatHealthDB');
 
@@ -35,3 +35,4 @@ export async function importDB(jsonString) {
     return false;
   }
 }
+

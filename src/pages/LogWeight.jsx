@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { db, LogType } from '../services/db';
 
@@ -46,3 +46,4 @@ function LogWeight() {
 }
 
 export default LogWeight;
+

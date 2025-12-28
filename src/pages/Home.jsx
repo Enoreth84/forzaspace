@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+Ôªøimport { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { db, LogType } from '../services/db';
 
@@ -22,10 +22,10 @@ function Home() {
         content = ` ${medName}${medDose}`;
         break;
       case LogType.PEE:
-        content = ` PipÏ ${log.details.blood ? ' Sangue' : ''}`;
+        content = ` Pip√¨ ${log.details.blood ? ' Sangue' : ''}`;
         break;
       case LogType.POO:
-        content = ` Pup˘ (${log.details.consistency})`;
+        content = ` Pup√π (${log.details.consistency})`;
         break;
       case LogType.MOOD:
         content = ` Mood: ${log.details}`;
@@ -42,7 +42,7 @@ function Home() {
   return (
     <div className="page-container">
       <header style={{ marginBottom: '2rem', textAlign: 'center' }}>
-        <h1 style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>Cat Log </h1>
+        <h1 style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>Forza Space </h1>
         <p style={{ color: '#666' }}>Benvenuto nel diario del tuo gatto</p>
       </header>
       
@@ -70,14 +70,14 @@ function Home() {
       </div>
 
       <div className="card" style={{ marginTop: '2rem' }}>
-        <h3>Ultime Attivit‡</h3>
+        <h3>Ultime Attivit√†</h3>
         <ul style={{ listStyle: 'none', padding: 0 }}>
           {recentLogs?.map(log => (
             <li key={log.id} style={{ padding: '0.5rem 0', borderBottom: '1px solid #eee' }}>
               {formatLog(log)}
             </li>
           ))}
-          {!recentLogs?.length && <li style={{ color: '#999', fontStyle: 'italic' }}>Nessuna attivit‡ recente</li>}
+          {!recentLogs?.length && <li style={{ color: '#999', fontStyle: 'italic' }}>Nessuna attivit√† recente</li>}
         </ul>
         <Link to="/history" style={{ display: 'block', marginTop: '1rem', textAlign: 'center', color: 'var(--primary-color)' }}>
           Vedi tutto lo storico
@@ -88,3 +88,4 @@ function Home() {
 }
 
 export default Home;
+

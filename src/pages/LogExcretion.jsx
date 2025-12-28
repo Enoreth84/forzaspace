@@ -1,4 +1,4 @@
-import { useState } from 'react';
+ï»¿import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { db, LogType } from '../services/db';
 
@@ -40,7 +40,7 @@ function LogExcretion() {
             className={type === LogType.PEE ? 'action-button' : 'card'}
             style={{ flex: 1, border: type === LogType.PEE ? 'none' : '1px solid #ddd' }}
           >
-             Pipì
+             PipÃ¬
           </button>
           <button 
             type="button" 
@@ -48,7 +48,7 @@ function LogExcretion() {
             className={type === LogType.POO ? 'action-button' : 'card'}
             style={{ flex: 1, border: type === LogType.POO ? 'none' : '1px solid #ddd', backgroundColor: type === LogType.POO ? 'var(--color-poo)' : '' }}
           >
-             Pupù
+             PupÃ¹
           </button>
         </div>
       </div>
@@ -62,7 +62,7 @@ function LogExcretion() {
               onChange={(e) => setHasBlood(e.target.checked)}
               style={{ transform: 'scale(1.5)' }}
             />
-            C'è sangue? 
+            C'Ã¨ sangue? 
           </label>
         ) : (
           <div>
@@ -81,7 +81,7 @@ function LogExcretion() {
         )}
         
         <button type="submit" className="action-button" style={{ marginTop: '1.5rem' }}>
-          Salva {type === LogType.PEE ? 'Pipì' : 'Pupù'}
+          Salva {type === LogType.PEE ? 'PipÃ¬' : 'PupÃ¹'}
         </button>
       </form>
     </div>
@@ -89,3 +89,4 @@ function LogExcretion() {
 }
 
 export default LogExcretion;
+
