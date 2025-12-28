@@ -70,6 +70,10 @@ function Home() {
           <span style={{ fontSize: '2rem' }}></span>
           <span>Peso</span>
         </Link>
+        <Link to="/charts" className="card action-card" style={{ background: '#e3f2fd', color: '#1565c0' }}>
+          <span style={{ fontSize: '2rem' }}></span>
+          <span>Statistiche</span>
+        </Link>
         <Link to="/settings" className="card action-card" style={{ gridColumn: '1 / -1', background: '#f8f9fa' }}>
             <span style={{ fontSize: '2rem' }}></span>
             <span>Impostazioni & Backup</span>

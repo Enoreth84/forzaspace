@@ -8,6 +8,7 @@ import LogFood from './pages/LogFood';
 import Settings from './pages/Settings';
 import History from './pages/History';
 import EditLog from './pages/EditLog';
+import Charts from './pages/Charts';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path="/settings" element={<Settings />} />
         <Route path="/history" element={<History />} />
         <Route path="/edit/:id" element={<EditLog />} />
+        <Route path="/charts" element={<Charts />} />
       </Routes>
     </Router>
   );
