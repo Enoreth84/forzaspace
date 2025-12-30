@@ -4,11 +4,14 @@ import { db, LogType } from '../services/db';
 
 const PRESETS = [
   { id: 'evexia', name: "EVEXIA FAST (ANTIDOLORIFICO)", defaultDosage: '0.25 ML' },
-  { id: 'semintra', name: "SEMINTRA (INSUFF. RENALE)", defaultDosage: 'DOSE 3KG' },
+  { id: 'semintra', name: "SEMINTRA (INSUFF. RENALE)", defaultDosage: '0.75 ML' },
   { id: 'deflacam', name: "DEFLACAM (ANTINFIAMM.)", defaultDosage: 'DOSE 1.5KG' },
   { id: 'gastrovom', name: "GASTROVOM (GASTROPROTE.)", defaultDosage: '1 ML' },
   { id: 'urys', name: "URYS (INTEGRITA' MUCOSA)", defaultDosage: '0.5 ML', options: ['0.5 ML', '1 ML'] },
-  { id: 'drenalase', name: "DRENALASE PET MINI", defaultDosage: '1 cp/gg' }
+  { id: 'drenalase', name: "DRENALASE PET MINI", defaultDosage: '1 cp/gg' },
+  { id: 'dinamina', name: "DINAMINA", defaultDosage: '2 ML' },
+  { id: 'nefrys', name: "NEFRYS", defaultDosage: '0.5 ML' },
+  { id: 'mirataz', name: "MIRATAZ", defaultDosage: '1 dose' }
 ];
 
 function LogMedicine() {
