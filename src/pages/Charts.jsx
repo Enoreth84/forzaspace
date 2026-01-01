@@ -185,6 +185,24 @@ function Charts() {
       </div>
 
       <div className="card" style={{ marginBottom: '2rem' }}>
+        <h3>Minerali (g) </h3>
+        <div style={{ height: '250px', width: '100%', fontSize: '0.8rem' }}>
+          <ResponsiveContainer>
+            <BarChart data={dailyData}>
+              <CartesianGrid strokeDasharray="3 3" vertical={false} />
+              <XAxis dataKey="date" tickFormatter={formatDate} />
+              <YAxis />
+              <Tooltip labelFormatter={formatDate} />
+              <Legend />
+              <Bar dataKey="phosphorus" fill="#7b1fa2" name="Fosforo" />
+              <Bar dataKey="sodium" fill="#0097a7" name="Sodio" />
+              <Bar dataKey="calcium" fill="#fbc02d" name="Calcio" />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+
+      <div className="card" style={{ marginBottom: '2rem' }}>
         <h3>Peso Totale Cibo (g) </h3>
         <div style={{ height: '250px', width: '100%', fontSize: '0.8rem' }}>
           <ResponsiveContainer>

@@ -22,6 +22,9 @@ export const processStats = (logs) => {
         protein: 0,
         fat: 0,
         carbs: 0,
+        phosphorus: 0,
+        sodium: 0,
+        calcium: 0,
         peeCount: 0,
         pooCount: 0,
       };
@@ -37,6 +40,9 @@ export const processStats = (logs) => {
           dailyStats[date].protein += parseFloat(log.details.protein || 0);
           dailyStats[date].fat += parseFloat(log.details.fat || 0);
           dailyStats[date].carbs += parseFloat(log.details.carbs || 0);
+          dailyStats[date].phosphorus += parseFloat(log.details.phosphorus || 0);
+          dailyStats[date].sodium += parseFloat(log.details.sodium || 0);
+          dailyStats[date].calcium += parseFloat(log.details.calcium || 0);
         }
         break;
 

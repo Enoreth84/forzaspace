@@ -20,10 +20,13 @@ export const FOOD_DATABASE = [
         name: 'Royal Canin Renal Special',
         protein: 26.0,
         fat: 17.0,
-        carbs: 40.5,
-        calories: 392,
+        carbs: 37.5,
+        calories: 392.0,
+        phosphorus: 0.45,
+        sodium: 0.40,
+        calcium: 0.63,
         unit: 'g',
-        allergens: 'Mais, Riso, Maiale, Pollo, Frumento, Pesce, Soia'
+        allergens: 'Cereali, Maiale, Pollo, Pesce, Soia'
     },
     {
         id: 'rc_renal_loaf',
@@ -33,8 +36,25 @@ export const FOOD_DATABASE = [
         fat: 6.5,
         carbs: 5.9,
         calories: 105.3,
+        phosphorus: 0.10,
+        sodium: 0.09,
+        calcium: 0.15,
         unit: 'g',
-        allergens: 'Pollo, Maiale, Salmone (Pesce), Cereali'
+        allergens: 'Pollo, Maiale, Salmone, Cereali'
+    },
+    {
+        id: 'vetlife_hepatic',
+        category: 'Umido',
+        name: 'VetLife Hepatic',
+        protein: 7.50,
+        fat: 4.80,
+        carbs: 7.45,
+        calories: 97.9,
+        phosphorus: 0.18,
+        sodium: 0.10,
+        calcium: 0.22,
+        unit: 'g',
+        allergens: 'Pollo, Uova, Pesce, Quinoa'
     },
     {
         id: 'gourmet_agnello',
@@ -43,20 +63,12 @@ export const FOOD_DATABASE = [
         protein: 17.0,
         fat: 4.0,
         carbs: 1.9,
-        calories: 101,
+        calories: 101.0,
+        phosphorus: 0.23,
+        sodium: 0.16,
+        calcium: 0.27,
         unit: 'g',
-        allergens: 'Agnello, Pesce, Fagiolini, Glutine'
-    },
-    {
-        id: 'vetlife_hepatic',
-        category: 'Umido',
-        name: 'VetLife Hepatic',
-        protein: 7.5,
-        fat: 4.8,
-        carbs: 7.45,
-        calories: 97.9,
-        unit: 'g',
-        allergens: 'Pollo, Uova, Pesce, Quinoa'
+        allergens: 'Agnello, Pesce, Glutine'
     },
     {
         id: 'ciao_dashi',
@@ -66,8 +78,11 @@ export const FOOD_DATABASE = [
         fat: 0.5,
         carbs: 1.2,
         calories: 46.0,
+        phosphorus: 0.015,
+        sodium: 0.15,
+        calcium: 0.002,
         unit: 'g',
-        allergens: 'Pollo, Pesce (Tonno)'
+        allergens: 'Pollo, Tonno'
     },
     {
         id: 'ciao_churu',
@@ -77,15 +92,11 @@ export const FOOD_DATABASE = [
         fat: 0.5,
         carbs: 3.4,
         calories: 44.0,
-        unit: 'pz', // Assuming 1 piece ~ 14g usually, but we'll track normalized to 100g data or treat as 'g' if user inputs g. 
-        // User specific req: "CIAO Churu (Vari gusti) ... 44 kcal (100g? or per piece?)". 
-        // Usually Churu is ~6-9kcal per tube (14g). 
-        // 44kcal/100g seems low for Churu (usually ~60kcal/100g). 
-        // I will assume the user provided values are PER 100g unless otherwise clear. 
-        // If user enters '1 pz', we need a conversion. 
-        // Let's stick to GRAMS input for everything to be safe for nutrition, or standard weight per piece.
-        // I'll default Churu input to stick (14g) but calculate using the provider 100g stats.
+        phosphorus: 0.025,
+        sodium: 0.20,
+        calcium: 0.003,
+        unit: 'pz',
         weightPerUnit: 14,
-        allergens: 'Pesce, Pollo, Molluschi, Latticini'
+        allergens: 'Tonno, Pollo, Molluschi, Formaggio'
     }
 ];

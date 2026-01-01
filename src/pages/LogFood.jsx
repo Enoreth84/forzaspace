@@ -62,7 +62,10 @@ function LogFood() {
           calories: 0, // Unknown
           protein: 0,
           fat: 0,
-          carbs: 0
+          carbs: 0,
+          phosphorus: 0,
+          sodium: 0,
+          calcium: 0
         };
       } else {
         const product = FOOD_DATABASE.find(f => f.id === selectedProduct);
@@ -86,7 +89,10 @@ function LogFood() {
           calories: (product.calories * multiplier).toFixed(1),
           protein: (product.protein * multiplier).toFixed(1),
           fat: (product.fat * multiplier).toFixed(1),
-          carbs: (product.carbs * multiplier).toFixed(1)
+          carbs: (product.carbs * multiplier).toFixed(1),
+          phosphorus: (product.phosphorus * multiplier).toFixed(3),
+          sodium: (product.sodium * multiplier).toFixed(3),
+          calcium: (product.calcium * multiplier).toFixed(3)
         };
       }
 
