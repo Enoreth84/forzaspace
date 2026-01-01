@@ -203,6 +203,9 @@ function Charts() {
 
       <div className="card" style={{ marginBottom: '2rem' }}>
         <h3>Macronutrienti (g) </h3>
+        <p style={{ fontSize: '0.8rem', color: '#666', marginTop: '-0.5rem', marginBottom: '1rem' }}>
+          Linea Rossa: Limite Proteico (Stimato su 250kcal di Secco: ~16.6g)
+        </p>
         <div style={{ height: '250px', width: '100%', fontSize: '0.8rem' }}>
           <ResponsiveContainer>
             <BarChart data={dailyData}>
@@ -211,6 +214,9 @@ function Charts() {
               <YAxis />
               <Tooltip labelFormatter={formatDate} />
               <Legend />
+              {/* Protein Limit: (250 / 392) * 100 * 0.26 = 16.6g */}
+              <ReferenceLine y={16.6} stroke="red" strokeDasharray="3 3" label={{ value: "Max Prot (16.6g)", fill: 'red', fontSize: 10, position: 'right' }} />
+
               <Bar dataKey="protein" stackId="a" fill="#42a5f5" name="Proteine" />
               <Bar dataKey="fat" stackId="a" fill="#ef5350" name="Grassi" />
               <Bar dataKey="carbs" stackId="a" fill="#66bb6a" name="Carboidrati" radius={[4, 4, 0, 0]} />
@@ -221,6 +227,9 @@ function Charts() {
 
       <div className="card" style={{ marginBottom: '2rem' }}>
         <h3>Minerali (g) </h3>
+        <p style={{ fontSize: '0.8rem', color: '#666', marginTop: '-0.5rem', marginBottom: '1rem' }}>
+          Linee Rosse: Limiti Giornalieri (Stimati su 250kcal di Secco)
+        </p>
         <div style={{ height: '250px', width: '100%', fontSize: '0.8rem' }}>
           <ResponsiveContainer>
             <BarChart data={dailyData}>
@@ -229,6 +238,16 @@ function Charts() {
               <YAxis />
               <Tooltip labelFormatter={formatDate} />
               <Legend />
+              {/* 
+                  Limits based on 63.8g dry food (250kcal):
+                  P (0.5%): 0.32g
+                  Na (0.4%): 0.26g
+                  Ca (0.63%): 0.40g
+               */}
+              <ReferenceLine y={0.32} stroke="#7b1fa2" strokeDasharray="3 3" label={{ value: "Max P (0.32g)", fill: '#7b1fa2', fontSize: 10, position: 'right' }} />
+              <ReferenceLine y={0.26} stroke="#0097a7" strokeDasharray="3 3" label={{ value: "Max Na (0.26g)", fill: '#0097a7', fontSize: 10, position: 'right' }} />
+              <ReferenceLine y={0.40} stroke="#fbc02d" strokeDasharray="3 3" label={{ value: "Max Ca (0.40g)", fill: '#fbc02d', fontSize: 10, position: 'right' }} />
+
               <Bar dataKey="phosphorus" fill="#7b1fa2" name="Fosforo" />
               <Bar dataKey="sodium" fill="#0097a7" name="Sodio" />
               <Bar dataKey="calcium" fill="#fbc02d" name="Calcio" />
