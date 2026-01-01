@@ -49,10 +49,23 @@ function Home() {
     );
   };
 
+  // Dynamic Title Logic
+  const [title, setTitle] = useState("Forza Space");
+
+  useEffect(() => {
+    const prefixes = ["Forza", "Vai", "Dai", "Coraggio", "Grande", "Vola", "Super"];
+    const names = ["Space", "Gattaccio", "Miciastro", "Cocchino", "Miciastrolino", "Patato", "Amore"];
+
+    const randomPrefix = prefixes[Math.floor(Math.random() * prefixes.length)];
+    const randomName = names[Math.floor(Math.random() * names.length)];
+
+    setTitle(`${randomPrefix} ${randomName}`);
+  }, []);
+
   return (
     <div className="page-container">
       <header style={{ marginBottom: '2rem', textAlign: 'center' }}>
-        <h1 style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>Forza Space </h1>
+        <h1 style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>{title} </h1>
         <p style={{ color: '#666' }}>Benvenuto nel diario del tuo gatto</p>
       </header>
 
