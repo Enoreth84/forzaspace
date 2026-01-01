@@ -176,7 +176,7 @@ function Charts() {
       <div className="card" style={{ marginBottom: '2rem' }}>
         <h3>Qualità Dieta (Densità %) </h3>
         <p style={{ fontSize: '0.8rem', color: '#666', marginTop: '-0.5rem', marginBottom: '1rem' }}>
-          Monitoraggio rispetto ai limiti massimi (Linee Rosse)
+          Monitoraggio rispetto ai limiti massimi (Linee Tratteggiate)
         </p>
         <div style={{ height: '300px', width: '100%', fontSize: '0.8rem' }}>
           <ResponsiveContainer>
