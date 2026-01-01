@@ -204,14 +204,14 @@ function Charts() {
       <div className="card" style={{ marginBottom: '2rem' }}>
         <h3>Macronutrienti (g) </h3>
         <p style={{ fontSize: '0.8rem', color: '#666', marginTop: '-0.5rem', marginBottom: '1rem' }}>
-          Linea Rossa: Limite Proteico (Stimato su 250kcal di Secco: ~16.6g)
+          Linee Tratteggiate: Limite Proteico (Stimato su 250kcal di Secco: ~16.6g)
         </p>
         <div style={{ height: '250px', width: '100%', fontSize: '0.8rem' }}>
           <ResponsiveContainer>
             <BarChart data={dailyData}>
               <CartesianGrid strokeDasharray="3 3" vertical={false} />
               <XAxis dataKey="date" tickFormatter={formatDate} />
-              <YAxis />
+              <YAxis domain={[0, dataMax => Math.max(dataMax, 20)]} />
               <Tooltip labelFormatter={formatDate} />
               <Legend />
               {/* Protein Limit: (250 / 392) * 100 * 0.26 = 16.6g */}
@@ -228,14 +228,14 @@ function Charts() {
       <div className="card" style={{ marginBottom: '2rem' }}>
         <h3>Minerali (g) </h3>
         <p style={{ fontSize: '0.8rem', color: '#666', marginTop: '-0.5rem', marginBottom: '1rem' }}>
-          Linee Rosse: Limiti Giornalieri (Stimati su 250kcal di Secco)
+          Linee Tratteggiate: Limiti Giornalieri (Stimati su 250kcal di Secco)
         </p>
         <div style={{ height: '250px', width: '100%', fontSize: '0.8rem' }}>
           <ResponsiveContainer>
             <BarChart data={dailyData}>
               <CartesianGrid strokeDasharray="3 3" vertical={false} />
               <XAxis dataKey="date" tickFormatter={formatDate} />
-              <YAxis />
+              <YAxis domain={[0, dataMax => Math.max(dataMax, 0.5)]} />
               <Tooltip labelFormatter={formatDate} />
               <Legend />
               {/* 
