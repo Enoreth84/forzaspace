@@ -44,22 +44,22 @@ function Home() {
     return (
       <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
         {time} - {content}
-        {hasPhoto && <span style={{ fontSize: '1.2rem' }} title="Foto allegata"></span>}
+        {hasPhoto && <span style={{ fontSize: '1.2rem' }} title="Foto allegata">📷</span>}
       </span>
     );
   };
 
   // Dynamic Title Logic
-  const [title, setTitle] = useState("Forza Space");
+  const [title, setTitle] = useState("Forza Space!");
 
   useEffect(() => {
-    const prefixes = ["Forza", "Vai", "Dai", "Coraggio", "Grande", "Vola", "Super"];
+    const prefixes = ["Forza", "Vai", "Dai", "Coraggio", "Grande", "Super"];
     const names = ["Space", "Gattaccio", "Miciastro", "Cocchino", "Miciastrolino", "Patato", "Amore"];
 
     const randomPrefix = prefixes[Math.floor(Math.random() * prefixes.length)];
     const randomName = names[Math.floor(Math.random() * names.length)];
 
-    setTitle(`${randomPrefix} ${randomName}`);
+    setTitle(`${randomPrefix} ${randomName}!`);
   }, []);
 
   return (
@@ -71,39 +71,39 @@ function Home() {
 
       <div className="grid-container">
         <Link to="/log/medicine" className="card action-card">
-          <span style={{ fontSize: '2rem' }}></span>
+          <span style={{ fontSize: '2rem' }}>💊</span>
           <span>Medicine</span>
         </Link>
         <Link to="/log/food" className="card action-card">
-          <span style={{ fontSize: '2rem' }}></span>
+          <span style={{ fontSize: '2rem' }}>🍖</span>
           <span>Cibo</span>
         </Link>
         <Link to="/log/excretion" className="card action-card">
-          <span style={{ fontSize: '2rem' }}></span>
+          <span style={{ fontSize: '2rem' }}>💧</span>
           <span>Bisogni</span>
         </Link>
         <Link to="/log/mood" className="card action-card">
-          <span style={{ fontSize: '2rem' }}></span>
+          <span style={{ fontSize: '2rem' }}>😺</span>
           <span>Umore</span>
         </Link>
         <Link to="/log/weight" className="card action-card">
-          <span style={{ fontSize: '2rem' }}></span>
+          <span style={{ fontSize: '2rem' }}>⚖️</span>
           <span>Peso</span>
         </Link>
         <Link to="/charts" className="card action-card" style={{ background: '#e3f2fd', color: '#1565c0' }}>
-          <span style={{ fontSize: '2rem' }}></span>
+          <span style={{ fontSize: '2rem' }}>📊</span>
           <span>Statistiche</span>
         </Link>
         <Link to="/log/note" className="card action-card" style={{ background: '#fff3e0', color: '#e65100' }}>
-          <span style={{ fontSize: '2rem' }}></span>
+          <span style={{ fontSize: '2rem' }}>📝</span>
           <span>Diario</span>
         </Link>
         <Link to="/export" className="card action-card" style={{ background: '#e0f7fa', color: '#006064' }}>
-          <span style={{ fontSize: '2rem' }}></span>
+          <span style={{ fontSize: '2rem' }}>📄</span>
           <span>Esporta PDF</span>
         </Link>
         <Link to="/settings" className="card action-card" style={{ gridColumn: '1 / -1', background: '#f8f9fa' }}>
-          <span style={{ fontSize: '2rem' }}></span>
+          <span style={{ fontSize: '2rem' }}>⚙️</span>
           <span>Impostazioni & Backup</span>
         </Link>
       </div>
