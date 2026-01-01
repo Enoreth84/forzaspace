@@ -54,6 +54,22 @@ export const processStats = (logs) => {
         dailyStats[date].pooCount += 1;
         break;
     }
+    // Calculate Percentages (Density)
+    // Avoid division by zero
+    if (dailyStats[date].foodTotal > 0) {
+      dailyStats[date].phosPct = (dailyStats[date].phosphorus / dailyStats[date].foodTotal) * 100;
+      dailyStats[date].sodPct = (dailyStats[date].sodium / dailyStats[date].foodTotal) * 100;
+      dailyStats[date].calcPct = (dailyStats[date].calcium / dailyStats[date].foodTotal) * 100;
+    } else {
+      dailyStats[date].phosPct = 0;
+      dailyStats[date].sodPct = 0;
+      dailyStats[date].calcPct = 0;
+    }
+
+    // Format for charts (limit decimals)
+    dailyStats[date].phosPct = parseFloat(dailyStats[date].phosPct.toFixed(3));
+    dailyStats[date].sodPct = parseFloat(dailyStats[date].sodPct.toFixed(3));
+    dailyStats[date].calcPct = parseFloat(dailyStats[date].calcPct.toFixed(3));
   });
 
   return Object.values(dailyStats).sort((a, b) => a.timestamp - b.timestamp);

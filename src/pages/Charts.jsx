@@ -152,16 +152,47 @@ function Charts() {
       </div>
 
       <div className="card" style={{ marginBottom: '2rem' }}>
-        <h3>Calorie Giornaliere (kcal) </h3>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <h3>Calorie Giornaliere (kcal) </h3>
+          <Link to="/guidelines" style={{ fontSize: '0.8rem', color: '#1976d2' }}>Vedi Linee Guida</Link>
+        </div>
         <div style={{ height: '250px', width: '100%', fontSize: '0.8rem' }}>
           <ResponsiveContainer>
             <BarChart data={dailyData}>
               <CartesianGrid strokeDasharray="3 3" vertical={false} />
               <XAxis dataKey="date" tickFormatter={formatDate} />
-              <YAxis />
+              <YAxis domain={[0, 'auto']} />
               <Tooltip labelFormatter={formatDate} />
+              {/* Target Zone 230-250 */}
+              <ReferenceLine y={230} stroke="green" strokeDasharray="3 3" label={{ value: "Min (230)", position: 'insideTopLeft', fill: 'green', fontSize: 10 }} />
+              <ReferenceLine y={250} stroke="green" strokeDasharray="3 3" label={{ value: "Max (250)", position: 'insideTopLeft', fill: 'green', fontSize: 10 }} />
               <Bar dataKey="calories" fill="#ffca28" name="Kcal" radius={[4, 4, 0, 0]} />
             </BarChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+
+      <div className="card" style={{ marginBottom: '2rem' }}>
+        <h3>Qualità Dieta (Densità %) </h3>
+        <p style={{ fontSize: '0.8rem', color: '#666', marginTop: '-0.5rem', marginBottom: '1rem' }}>
+          Monitoraggio rispetto ai limiti massimi (Linee Rosse)
+        </p>
+        <div style={{ height: '300px', width: '100%', fontSize: '0.8rem' }}>
+          <ResponsiveContainer>
+            <LineChart data={dailyData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="date" tickFormatter={formatDate} />
+              <YAxis domain={[0, 0.8]} />
+              <Tooltip labelFormatter={formatDate} />
+              <Legend />
+
+              {/* Limits */}
+              <ReferenceLine y={0.5} stroke="red" strokeDasharray="3 3" label={{ value: "Max P (0.5%)", fill: 'red', fontSize: 10 }} />
+
+              <Line type="monotone" dataKey="phosPct" stroke="#8884d8" name="Fosforo %" strokeWidth={2} dot={{ r: 3 }} />
+              <Line type="monotone" dataKey="sodPct" stroke="#82ca9d" name="Sodio %" strokeWidth={2} dot={{ r: 3 }} />
+              <Line type="monotone" dataKey="calcPct" stroke="#ffc658" name="Calcio %" strokeWidth={2} dot={{ r: 3 }} />
+            </LineChart>
           </ResponsiveContainer>
         </div>
       </div>

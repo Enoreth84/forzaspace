@@ -11,6 +11,7 @@ import EditLog from './pages/EditLog';
 import Charts from './pages/Charts';
 import Export from './pages/Export';
 import LogNote from './pages/LogNote';
+import Guidelines from './pages/Guidelines';
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
         <Route path="/charts" element={<Charts />} />
         <Route path="/export" element={<Export />} />
         <Route path="/log/note" element={<LogNote />} />
+        <Route path="/guidelines" element={<Guidelines />} />
       </Routes>
     </Router>
   );
