@@ -162,6 +162,9 @@ function Export() {
                     case LogType.MEDICINE:
                         typeLabel = 'Medicina';
                         details = `${log.details.name} - ${log.details.dosage}`;
+                        if (log.details.site) {
+                            details += ` (${log.details.site})`;
+                        }
                         break;
                     case LogType.PEE:
                         typeLabel = 'Pipì';

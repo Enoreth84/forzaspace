@@ -12,11 +12,12 @@ function History() {
   }, []);
 
   const formatDetails = (log) => {
-    switch(log.type) {
+    switch (log.type) {
       case LogType.MEDICINE:
         const medName = typeof log.details === 'object' ? log.details.name : log.details;
         const medDose = typeof log.details === 'object' ? ` (${log.details.dosage})` : '';
-        return ` ${medName}${medDose}`;
+        const medSite = (typeof log.details === 'object' && log.details.site) ? ` - ${log.details.site}` : '';
+        return ` ${medName}${medDose}${medSite}`;
       case LogType.FOOD:
         return ` ${log.details.name} (${log.details.quantity})`;
       case LogType.PEE:
@@ -26,7 +27,7 @@ function History() {
       case LogType.MOOD:
         return ` Mood: ${log.details}`;
       case LogType.WEIGHT:
-         return ` Peso: ${log.details} kg`;
+        return ` Peso: ${log.details} kg`;
       default:
         return ' Nota';
     }
@@ -39,10 +40,10 @@ function History() {
         {logs.length === 0 ? <p>Nessun dato registrato.</p> : (
           <ul style={{ listStyle: 'none', padding: 0 }}>
             {logs.map(log => {
-               const hasPhoto = log.details && log.details.photo;
-               return (
-                <li key={log.id} style={{ 
-                  padding: '1rem 0', 
+              const hasPhoto = log.details && log.details.photo;
+              return (
+                <li key={log.id} style={{
+                  padding: '1rem 0',
                   borderBottom: '1px solid #eee',
                   display: 'flex',
                   justifyContent: 'space-between',
@@ -59,25 +60,25 @@ function History() {
                       {hasPhoto && <span style={{ fontSize: '1.2rem' }} title="Foto allegata"></span>}
                     </div>
                   </div>
-                  <Link to={`/edit/${log.id}`} style={{ 
-                     textDecoration: 'none', 
-                     fontSize: '0.9rem', 
-                     padding: '0.4rem 0.8rem',
-                     backgroundColor: '#f0f0f0',
-                     borderRadius: '6px',
-                     border: '1px solid #ddd',
-                     color: '#333'
+                  <Link to={`/edit/${log.id}`} style={{
+                    textDecoration: 'none',
+                    fontSize: '0.9rem',
+                    padding: '0.4rem 0.8rem',
+                    backgroundColor: '#f0f0f0',
+                    borderRadius: '6px',
+                    border: '1px solid #ddd',
+                    color: '#333'
                   }}>
-                     Modifica
+                    Modifica
                   </Link>
                 </li>
-               );
+              );
             })}
           </ul>
         )}
       </div>
       <Link to="/" style={{ display: 'block', marginTop: '1.5rem', textAlign: 'center' }}>
-         Torna alla Home
+        Torna alla Home
       </Link>
     </div>
   );
