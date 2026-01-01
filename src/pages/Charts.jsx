@@ -152,7 +152,40 @@ function Charts() {
       </div>
 
       <div className="card" style={{ marginBottom: '2rem' }}>
-        <h3>Cibo Consumato (g) </h3>
+        <h3>Calorie Giornaliere (kcal) </h3>
+        <div style={{ height: '250px', width: '100%', fontSize: '0.8rem' }}>
+          <ResponsiveContainer>
+            <BarChart data={dailyData}>
+              <CartesianGrid strokeDasharray="3 3" vertical={false} />
+              <XAxis dataKey="date" tickFormatter={formatDate} />
+              <YAxis />
+              <Tooltip labelFormatter={formatDate} />
+              <Bar dataKey="calories" fill="#ffca28" name="Kcal" radius={[4, 4, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+
+      <div className="card" style={{ marginBottom: '2rem' }}>
+        <h3>Macronutrienti (g) </h3>
+        <div style={{ height: '250px', width: '100%', fontSize: '0.8rem' }}>
+          <ResponsiveContainer>
+            <BarChart data={dailyData}>
+              <CartesianGrid strokeDasharray="3 3" vertical={false} />
+              <XAxis dataKey="date" tickFormatter={formatDate} />
+              <YAxis />
+              <Tooltip labelFormatter={formatDate} />
+              <Legend />
+              <Bar dataKey="protein" stackId="a" fill="#42a5f5" name="Proteine" />
+              <Bar dataKey="fat" stackId="a" fill="#ef5350" name="Grassi" />
+              <Bar dataKey="carbs" stackId="a" fill="#66bb6a" name="Carboidrati" radius={[4, 4, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+
+      <div className="card" style={{ marginBottom: '2rem' }}>
+        <h3>Peso Totale Cibo (g) </h3>
         <div style={{ height: '250px', width: '100%', fontSize: '0.8rem' }}>
           <ResponsiveContainer>
             <BarChart data={dailyData}>

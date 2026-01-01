@@ -18,11 +18,12 @@ export const processStats = (logs) => {
         date,
         timestamp: log.timestamp, // keep for sorting
         foodTotal: 0,
+        calories: 0,
+        protein: 0,
+        fat: 0,
+        carbs: 0,
         peeCount: 0,
         pooCount: 0,
-        // Weight is handled separately now for graphs, 
-        // but we might keep a daily avg if needed. 
-        // We'll skip weight in this aggregate for now.
       };
     }
 
@@ -30,6 +31,13 @@ export const processStats = (logs) => {
       case LogType.FOOD:
         const qty = typeof log.details === 'object' ? log.details.quantity : '0';
         dailyStats[date].foodTotal += parseQuantity(qty);
+        // Nutrition
+        if (typeof log.details === 'object') {
+          dailyStats[date].calories += parseFloat(log.details.calories || 0);
+          dailyStats[date].protein += parseFloat(log.details.protein || 0);
+          dailyStats[date].fat += parseFloat(log.details.fat || 0);
+          dailyStats[date].carbs += parseFloat(log.details.carbs || 0);
+        }
         break;
 
       case LogType.PEE:
