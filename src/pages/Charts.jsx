@@ -217,9 +217,9 @@ function Charts() {
               {/* Protein Limit: (250 / 392) * 100 * 0.26 = 16.6g */}
               <ReferenceLine y={16.6} stroke="red" strokeDasharray="3 3" label={{ value: "Max Prot (16.6g)", fill: 'red', fontSize: 10, position: 'right' }} />
 
-              <Bar dataKey="protein" stackId="a" fill="#42a5f5" name="Proteine" />
-              <Bar dataKey="fat" stackId="a" fill="#ef5350" name="Grassi" />
-              <Bar dataKey="carbs" stackId="a" fill="#66bb6a" name="Carboidrati" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="protein" fill="#42a5f5" name="Proteine" />
+              <Bar dataKey="fat" fill="#ef5350" name="Grassi" />
+              <Bar dataKey="carbs" fill="#66bb6a" name="Carboidrati" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
