@@ -48,6 +48,8 @@ function Charts() {
 
   // Gradient offset calculation for Mood Area Chart
   const gradientOffset = () => {
+    if (!moodData || moodData.length === 0) return 0; // Safety check
+
     const dataMax = Math.max(...moodData.map((i) => i.score));
     const dataMin = Math.min(...moodData.map((i) => i.score));
 

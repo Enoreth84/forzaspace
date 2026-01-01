@@ -62,11 +62,13 @@ export const processMoodStats = (logs, moodConstants) => {
     .filter(log => log.type === LogType.MOOD)
     .sort((a, b) => a.timestamp - b.timestamp)
     .map(log => {
-      // Log details is the mood label string ' Felice' (with space probably) or just 'Felice'
-      // We trim just in case
-      const label = log.details.trim();
+      // Log details is the mood label string
+      // Safety check: ensure details is a string
+      const label = (typeof log.details === 'string') ? log.details.trim() : 'Sconosciuto';
+
       const constant = moodConstants.find(m => m.label === label);
       const score = constant ? constant.score : 0;
+
       return {
         timestamp: log.timestamp,
         dateStr: new Date(log.timestamp).toLocaleDateString([], { day: '2-digit', month: '2-digit' }),
