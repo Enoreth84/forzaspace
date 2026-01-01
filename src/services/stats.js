@@ -12,7 +12,7 @@ export const processStats = (logs) => {
 
   logs.forEach(log => {
     const date = log.date; // already YYYY-MM-DD
-    
+
     if (!dailyStats[date]) {
       dailyStats[date] = {
         date,
@@ -26,16 +26,16 @@ export const processStats = (logs) => {
       };
     }
 
-    switch(log.type) {
+    switch (log.type) {
       case LogType.FOOD:
         const qty = typeof log.details === 'object' ? log.details.quantity : '0';
         dailyStats[date].foodTotal += parseQuantity(qty);
         break;
-      
+
       case LogType.PEE:
         dailyStats[date].peeCount += 1;
         break;
-        
+
       case LogType.POO:
         dailyStats[date].pooCount += 1;
         break;
@@ -55,4 +55,24 @@ export const processWeightStats = (logs) => {
       timeStr: new Date(log.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       weight: parseFloat(log.details)
     }));
+};
+
+export const processMoodStats = (logs, moodConstants) => {
+  return logs
+    .filter(log => log.type === LogType.MOOD)
+    .sort((a, b) => a.timestamp - b.timestamp)
+    .map(log => {
+      // Log details is the mood label string ' Felice' (with space probably) or just 'Felice'
+      // We trim just in case
+      const label = log.details.trim();
+      const constant = moodConstants.find(m => m.label === label);
+      const score = constant ? constant.score : 0;
+      return {
+        timestamp: log.timestamp,
+        dateStr: new Date(log.timestamp).toLocaleDateString([], { day: '2-digit', month: '2-digit' }),
+        timeStr: new Date(log.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        mood: label,
+        score: score
+      };
+    });
 };

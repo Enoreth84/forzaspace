@@ -1,6 +1,8 @@
 ﻿import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { db, LogType } from '../services/db';
+import DateTimeSelector from '../components/DateTimeSelector';
+import NotesField from '../components/NotesField';
 
 const PRESETS = [
   { id: 'evexia', name: "EVEXIA FAST (ANTIDOLORIFICO)", defaultDosage: '0.25 ML' },
@@ -23,9 +25,13 @@ function LogMedicine() {
     });
     return initial;
   });
-  
+
   const [customName, setCustomName] = useState('');
   const [customDosage, setCustomDosage] = useState('');
+
+  // New state
+  const [timestamp, setTimestamp] = useState(Date.now());
+  const [notes, setNotes] = useState('');
 
   const toggleItem = (id) => {
     setItems(prev => ({
@@ -43,7 +49,7 @@ function LogMedicine() {
 
   const saveLog = async () => {
     const selectedMedicines = [];
-    
+
     PRESETS.forEach(p => {
       if (items[p.id].selected) {
         selectedMedicines.push({
@@ -67,15 +73,16 @@ function LogMedicine() {
 
     try {
       await db.transaction('rw', db.logs, async () => {
-        const now = Date.now();
-        const dateStr = new Date().toISOString().split('T')[0];
-        
+        // Use selected timestamp
+        const dateStr = new Date(timestamp).toISOString().split('T')[0];
+
         for (const med of selectedMedicines) {
           await db.logs.add({
             type: LogType.MEDICINE,
-            timestamp: now,
+            timestamp: timestamp,
             date: dateStr,
-            details: med
+            details: med,
+            notes: notes // Add notes
           });
         }
       });
@@ -89,43 +96,45 @@ function LogMedicine() {
   return (
     <div className="page-container">
       <h1>Registra Medicina </h1>
-      
+
       <div className="card">
+        <DateTimeSelector timestamp={timestamp} onChange={setTimestamp} />
+
         <h3>Lista Prescritta</h3>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           {PRESETS.map(p => (
-            <div key={p.id} style={{ 
-              display: 'flex', 
-              flexDirection: 'column', 
-              padding: '0.5rem', 
+            <div key={p.id} style={{
+              display: 'flex',
+              flexDirection: 'column',
+              padding: '0.5rem',
               border: items[p.id].selected ? '2px solid var(--primary-color)' : '1px solid #ddd',
               borderRadius: '8px',
               backgroundColor: items[p.id].selected ? 'rgba(var(--primary-rgb), 0.05)' : 'transparent'
             }}>
               <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 'bold', cursor: 'pointer' }}>
-                <input 
-                  type="checkbox" 
-                  checked={items[p.id].selected} 
+                <input
+                  type="checkbox"
+                  checked={items[p.id].selected}
                   onChange={() => toggleItem(p.id)}
                   style={{ transform: 'scale(1.2)' }}
                 />
                 {p.name}
               </label>
-              
+
               {items[p.id].selected && (
                 <div style={{ marginTop: '0.5rem', marginLeft: '1.8rem' }}>
                   <label style={{ fontSize: '0.9rem', color: '#666' }}>Dosaggio:</label>
                   {p.options ? (
-                     <select 
-                       value={items[p.id].dosage} 
-                       onChange={(e) => updateDosage(p.id, e.target.value)}
-                       style={{ width: '100%', padding: '0.5rem', marginTop: '0.2rem' }}
-                     >
-                       {p.options.map(opt => <option key={opt} value={opt}>{opt}</option>)}
-                     </select>
+                    <select
+                      value={items[p.id].dosage}
+                      onChange={(e) => updateDosage(p.id, e.target.value)}
+                      style={{ width: '100%', padding: '0.5rem', marginTop: '0.2rem' }}
+                    >
+                      {p.options.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+                    </select>
                   ) : (
-                    <input 
-                      type="text" 
+                    <input
+                      type="text"
                       value={items[p.id].dosage}
                       onChange={(e) => updateDosage(p.id, e.target.value)}
                       style={{ width: '100%', padding: '0.5rem', marginTop: '0.2rem' }}
@@ -138,23 +147,27 @@ function LogMedicine() {
         </div>
 
         <h3 style={{ marginTop: '1.5rem' }}>Altro / Manuale</h3>
-        <input 
-          type="text" 
-          placeholder="Nome Medicina" 
+        <input
+          type="text"
+          placeholder="Nome Medicina"
           value={customName}
           onChange={(e) => setCustomName(e.target.value)}
           style={{ width: '100%', marginBottom: '0.5rem' }}
         />
-        <input 
-          type="text" 
-          placeholder="Dosaggio" 
+        <input
+          type="text"
+          placeholder="Dosaggio"
           value={customDosage}
           onChange={(e) => setCustomDosage(e.target.value)}
           style={{ width: '100%' }}
         />
 
-        <button 
-          onClick={saveLog} 
+        <div style={{ marginTop: '1.5rem' }}>
+          <NotesField value={notes} onChange={setNotes} />
+        </div>
+
+        <button
+          onClick={saveLog}
           className="action-button"
           style={{ marginTop: '1.5rem' }}
         >

@@ -12,7 +12,8 @@ export const LogType = {
   POO: 'poo',
   MOOD: 'mood',
   WEIGHT: 'weight',
-  FOOD: 'food'
+  FOOD: 'food',
+  NOTE: 'note'
 };
 
 // Export all data to JSON
@@ -26,9 +27,9 @@ export async function importDB(jsonString) {
   try {
     const logs = JSON.parse(jsonString);
     if (!Array.isArray(logs)) throw new Error("Invalid backup file");
-    
+
     await db.transaction('rw', db.logs, async () => {
-        await db.logs.bulkPut(logs);
+      await db.logs.bulkPut(logs);
     });
     return true;
   } catch (error) {

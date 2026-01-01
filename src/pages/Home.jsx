@@ -15,8 +15,8 @@ function Home() {
     const time = new Date(log.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     let content = '';
     const hasPhoto = log.details && log.details.photo;
-    
-    switch(log.type) {
+
+    switch (log.type) {
       case LogType.MEDICINE:
         const medName = typeof log.details === 'object' ? log.details.name : log.details;
         const medDose = typeof log.details === 'object' ? ` (${log.details.dosage})` : '';
@@ -35,12 +35,12 @@ function Home() {
         content = ` Mood: ${log.details}`;
         break;
       case LogType.WEIGHT:
-         content = ` Peso: ${log.details} kg`;
+        content = ` Peso: ${log.details} kg`;
         break;
       default:
         content = ' Nota';
     }
-    
+
     return (
       <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
         {time} - {content}
@@ -55,7 +55,7 @@ function Home() {
         <h1 style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>Forza Space </h1>
         <p style={{ color: '#666' }}>Benvenuto nel diario del tuo gatto</p>
       </header>
-      
+
       <div className="grid-container">
         <Link to="/log/medicine" className="card action-card">
           <span style={{ fontSize: '2rem' }}></span>
@@ -81,9 +81,17 @@ function Home() {
           <span style={{ fontSize: '2rem' }}></span>
           <span>Statistiche</span>
         </Link>
+        <Link to="/log/note" className="card action-card" style={{ background: '#fff3e0', color: '#e65100' }}>
+          <span style={{ fontSize: '2rem' }}></span>
+          <span>Diario</span>
+        </Link>
+        <Link to="/export" className="card action-card" style={{ background: '#e0f7fa', color: '#006064' }}>
+          <span style={{ fontSize: '2rem' }}></span>
+          <span>Esporta PDF</span>
+        </Link>
         <Link to="/settings" className="card action-card" style={{ gridColumn: '1 / -1', background: '#f8f9fa' }}>
-            <span style={{ fontSize: '2rem' }}></span>
-            <span>Impostazioni & Backup</span>
+          <span style={{ fontSize: '2rem' }}></span>
+          <span>Impostazioni & Backup</span>
         </Link>
       </div>
 
@@ -91,8 +99,8 @@ function Home() {
         <h3>Ultime Attività</h3>
         <ul style={{ listStyle: 'none', padding: 0 }}>
           {recentLogs?.map(log => (
-            <li key={log.id} style={{ 
-              padding: '0.8rem 0', 
+            <li key={log.id} style={{
+              padding: '0.8rem 0',
               borderBottom: '1px solid #eee',
               display: 'flex',
               justifyContent: 'space-between',
@@ -101,9 +109,9 @@ function Home() {
               gap: '0.5rem'
             }}>
               <div style={{ flex: 1 }}>{formatLog(log)}</div>
-              <Link to={`/edit/${log.id}`} style={{ 
-                textDecoration: 'none', 
-                fontSize: '0.9rem', 
+              <Link to={`/edit/${log.id}`} style={{
+                textDecoration: 'none',
+                fontSize: '0.9rem',
                 padding: '0.3rem 0.6rem',
                 backgroundColor: '#f0f0f0',
                 borderRadius: '6px',
@@ -111,7 +119,7 @@ function Home() {
                 color: '#333',
                 whiteSpace: 'nowrap'
               }}>
-                 Modifica
+                Modifica
               </Link>
             </li>
           ))}

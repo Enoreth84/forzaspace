@@ -9,6 +9,8 @@ import Settings from './pages/Settings';
 import History from './pages/History';
 import EditLog from './pages/EditLog';
 import Charts from './pages/Charts';
+import Export from './pages/Export';
+import LogNote from './pages/LogNote';
 
 function App() {
   return (
@@ -24,6 +26,8 @@ function App() {
         <Route path="/history" element={<History />} />
         <Route path="/edit/:id" element={<EditLog />} />
         <Route path="/charts" element={<Charts />} />
+        <Route path="/export" element={<Export />} />
+        <Route path="/log/note" element={<LogNote />} />
       </Routes>
     </Router>
   );
