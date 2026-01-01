@@ -34,6 +34,7 @@ function LogMedicine() {
   // New state
   const [timestamp, setTimestamp] = useState(Date.now());
   const [notes, setNotes] = useState('');
+  const [miratazSide, setMiratazSide] = useState(''); // 'SX' or 'DX'
 
   const toggleItem = (id) => {
     setItems(prev => ({
@@ -54,10 +55,21 @@ function LogMedicine() {
 
     PRESETS.forEach(p => {
       if (items[p.id].selected) {
-        selectedMedicines.push({
+        const medData = {
           name: p.name,
           dosage: items[p.id].dosage
-        });
+        };
+
+        // Special logic for Mirataz
+        if (p.id === 'mirataz') {
+          if (!miratazSide) {
+            alert("Seleziona l'orecchio per il Mirataz!");
+            throw new Error("Missing Mirataz side");
+          }
+          medData.site = `Orecchio ${miratazSide}`;
+        }
+
+        selectedMedicines.push(medData);
       }
     });
 
@@ -90,8 +102,10 @@ function LogMedicine() {
       });
       navigate('/');
     } catch (err) {
-      console.error(err);
-      alert("Errore nel salvataggio");
+      if (err.message !== "Missing Mirataz side") {
+        console.error(err);
+        alert("Errore nel salvataggio");
+      }
     }
   };
 
@@ -141,6 +155,41 @@ function LogMedicine() {
                       onChange={(e) => updateDosage(p.id, e.target.value)}
                       style={{ width: '100%', padding: '0.5rem', marginTop: '0.2rem' }}
                     />
+                  )}
+
+                  {/* Mirataz Special UI */}
+                  {p.id === 'mirataz' && (
+                    <div style={{ marginTop: '0.5rem', display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                      <span style={{ fontSize: '0.9rem', fontWeight: 'bold' }}>Orecchio:</span>
+                      <button
+                        type="button"
+                        onClick={() => setMiratazSide('SX')}
+                        style={{
+                          padding: '0.4rem 0.8rem',
+                          border: '1px solid #ccc',
+                          borderRadius: '4px',
+                          backgroundColor: miratazSide === 'SX' ? 'var(--primary-color)' : 'white',
+                          color: miratazSide === 'SX' ? 'white' : 'black',
+                          cursor: 'pointer'
+                        }}
+                      >
+                        SX
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setMiratazSide('DX')}
+                        style={{
+                          padding: '0.4rem 0.8rem',
+                          border: '1px solid #ccc',
+                          borderRadius: '4px',
+                          backgroundColor: miratazSide === 'DX' ? 'var(--primary-color)' : 'white',
+                          color: miratazSide === 'DX' ? 'white' : 'black',
+                          cursor: 'pointer'
+                        }}
+                      >
+                        DX
+                      </button>
+                    </div>
                   )}
                 </div>
               )}

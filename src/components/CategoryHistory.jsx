@@ -23,7 +23,11 @@ function CategoryHistory({ type, limit = 5 }) {
             case LogType.FOOD:
                 return typeof log.details === 'object' ? `${log.details.quantity} (${log.details.name})` : log.details;
             case LogType.MEDICINE:
-                return `${log.details.name} - ${log.details.dosage}`;
+                let details = `${log.details.name} - ${log.details.dosage}`;
+                if (log.details.site) {
+                    details += ` (${log.details.site})`;
+                }
+                return details;
             case LogType.PEE:
                 return log.details.blood ? 'SANGUE!' : 'Normale';
             case LogType.POO:
