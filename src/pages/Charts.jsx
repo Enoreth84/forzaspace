@@ -5,7 +5,7 @@ import { MOODS } from '../services/constants';
 import { Link } from 'react-router-dom';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
-  LineChart, Line, Cell, ReferenceLine
+  LineChart, Line, Cell, ReferenceLine, AreaChart, Area
 } from 'recharts';
 
 function Charts() {
