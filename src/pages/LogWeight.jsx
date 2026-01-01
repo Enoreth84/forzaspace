@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { db, LogType } from '../services/db';
 import DateTimeSelector from '../components/DateTimeSelector';
 import NotesField from '../components/NotesField';
+import CategoryHistory from '../components/CategoryHistory';
 
 function LogWeight() {
   const navigate = useNavigate();
@@ -57,9 +58,10 @@ function LogWeight() {
           <button type="submit" className="action-button" style={{ marginTop: '1rem' }}>Salva Peso</button>
         </form>
       </div>
+
+      <CategoryHistory type={LogType.WEIGHT} />
     </div>
   );
 }
 
 export default LogWeight;
-

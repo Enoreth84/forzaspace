@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { db, LogType } from '../services/db';
 import DateTimeSelector from '../components/DateTimeSelector';
 import NotesField from '../components/NotesField';
+import CategoryHistory from '../components/CategoryHistory';
 
 const PRESETS = [
   { id: 'evexia', name: "EVEXIA FAST (ANTIDOLORIFICO)", defaultDosage: '0.25 ML' },
@@ -10,8 +11,9 @@ const PRESETS = [
   { id: 'deflacam', name: "DEFLACAM (ANTINFIAMM.)", defaultDosage: 'DOSE 1.5KG' },
   { id: 'gastrovom', name: "GASTROVOM (GASTROPROTE.)", defaultDosage: '1 ML' },
   { id: 'urys', name: "URYS (INTEGRITA' MUCOSA)", defaultDosage: '0.5 ML', options: ['0.5 ML', '1 ML'] },
-  { id: 'drenalase', name: "DRENALASE PET MINI", defaultDosage: '1 cp/gg' },
-  { id: 'dinamina', name: "DINAMINA", defaultDosage: '2 ML' },
+  { id: 'dolorina', name: "DOLORINA", defaultDosage: '2 ML' },
+  { id: 'cerenia', name: "CERENIA INIETTABILE", defaultDosage: '1 dose' },
+  { id: 'ringer', name: "RINGER LATTATO", defaultDosage: '60 ML' },
   { id: 'nefrys', name: "NEFRYS", defaultDosage: '0.5 ML' },
   { id: 'mirataz', name: "MIRATAZ", defaultDosage: '1 dose' }
 ];
@@ -174,9 +176,10 @@ function LogMedicine() {
           Salva Medicine
         </button>
       </div>
+
+      <CategoryHistory type={LogType.MEDICINE} />
     </div>
   );
 }
 
 export default LogMedicine;
-

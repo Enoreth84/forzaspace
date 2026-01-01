@@ -70,11 +70,17 @@ function Charts() {
       <div className="card" style={{ marginBottom: '2rem' }}>
         <h3>Andamento Umore </h3>
         <p style={{ fontSize: '0.8rem', color: '#666', marginTop: '-0.5rem', marginBottom: '1rem' }}>
-          Verde = Positivo, Rosso = Negativo
+          Area Verde = Positivo, Area Rossa = Negativo
         </p>
         <div style={{ height: '250px', width: '100%', fontSize: '0.8rem' }}>
           <ResponsiveContainer>
-            <BarChart data={moodData}>
+            <AreaChart data={moodData}>
+              <defs>
+                <linearGradient id="splitColor" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset={off} stopColor="#4caf50" stopOpacity={0.6} />
+                  <stop offset={off} stopColor="#f44336" stopOpacity={0.6} />
+                </linearGradient>
+              </defs>
               <CartesianGrid strokeDasharray="3 3" vertical={false} />
               <XAxis
                 dataKey="timestamp"
@@ -82,18 +88,46 @@ function Charts() {
                 domain={['auto', 'auto']}
                 tickFormatter={(ts) => new Date(ts).toLocaleDateString([], { day: '2-digit', month: '2-digit' })}
               />
-              <YAxis domain={[-3, 3]} ticks={[-2, -1, 0, 1, 2]} />
+              <YAxis domain={[-3, 3]} ticks={[-2, 0, 2]} />
               <Tooltip
                 labelFormatter={(ts) => new Date(ts).toLocaleString([], { weekday: 'short', day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })}
                 formatter={(value, name, props) => [props.payload.mood, 'Umore']}
               />
-              <ReferenceLine y={0} stroke="#000" />
-              <Bar dataKey="score" name="Punteggio">
-                {moodData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.score >= 0 ? '#4caf50' : '#f44336'} />
-                ))}
-              </Bar>
-            </BarChart>
+              <ReferenceLine y={0} stroke="#000" strokeDasharray="3 3" />
+              <Area
+                type="monotone"
+                dataKey="score"
+                stroke="#8884d8"
+                fill="url(#splitColor)"
+                name="Punteggio"
+                dot={{ r: 4, fill: '#888' }}
+              />
+            </AreaChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+
+      <div className="card" style={{ marginBottom: '2rem' }}>
+        <h3>Peso (kg) </h3>
+        <p style={{ fontSize: '0.8rem', color: '#666', marginTop: '-0.5rem', marginBottom: '1rem' }}>
+          Monitoraggio puntuale (Data e Ora)
+        </p>
+        <div style={{ height: '250px', width: '100%', fontSize: '0.8rem' }}>
+          <ResponsiveContainer>
+            <LineChart data={weightData}>
+              <CartesianGrid strokeDasharray="3 3" vertical={false} />
+              <XAxis
+                dataKey="timestamp"
+                type="number"
+                domain={['auto', 'auto']}
+                tickFormatter={(ts) => new Date(ts).toLocaleDateString([], { day: '2-digit', month: '2-digit' })}
+              />
+              <YAxis domain={['auto', 'auto']} padding={{ top: 20, bottom: 20 }} />
+              <Tooltip
+                labelFormatter={(ts) => new Date(ts).toLocaleString([], { weekday: 'short', day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })}
+              />
+              <Line type="monotone" dataKey="weight" stroke="#ff7300" strokeWidth={2} dot={{ r: 4 }} name="Peso (kg)" />
+            </LineChart>
           </ResponsiveContainer>
         </div>
       </div>

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { db, LogType } from '../services/db';
 import DateTimeSelector from '../components/DateTimeSelector';
 import NotesField from '../components/NotesField';
+import CategoryHistory from '../components/CategoryHistory';
 
 const PRESETS = [
   { id: 'wet', name: "Umido", defaultDosage: '85g' },
@@ -158,6 +159,8 @@ function LogFood() {
           Salva Cibo
         </button>
       </div>
+
+      <CategoryHistory type={LogType.FOOD} />
     </div>
   );
 }

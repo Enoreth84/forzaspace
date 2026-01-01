@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { db, LogType } from '../services/db';
 import DateTimeSelector from '../components/DateTimeSelector';
 import NotesField from '../components/NotesField';
+import CategoryHistory from '../components/CategoryHistory';
 
 function LogExcretion() {
   const navigate = useNavigate();
@@ -122,6 +123,8 @@ function LogExcretion() {
 
         <button onClick={saveLog} className="action-button" style={{ marginTop: '1rem' }}>Salva</button>
       </div>
+
+      <CategoryHistory type={type === 'pee' ? LogType.PEE : LogType.POO} key={type} />
     </div>
   );
 }

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { db, LogType } from '../services/db';
 import DateTimeSelector from '../components/DateTimeSelector';
 import NotesField from '../components/NotesField';
+import CategoryHistory from '../components/CategoryHistory';
 
 function LogNote() {
     const navigate = useNavigate();
@@ -50,6 +51,8 @@ function LogNote() {
                     Salva Nota
                 </button>
             </div>
+
+            <CategoryHistory type={LogType.NOTE} />
         </div>
     );
 }

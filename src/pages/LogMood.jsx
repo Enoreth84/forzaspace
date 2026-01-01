@@ -4,6 +4,7 @@ import { db, LogType } from '../services/db';
 import { MOODS } from '../services/constants';
 import DateTimeSelector from '../components/DateTimeSelector';
 import NotesField from '../components/NotesField';
+import CategoryHistory from '../components/CategoryHistory';
 
 function LogMood() {
   const navigate = useNavigate();
@@ -68,6 +69,8 @@ function LogMood() {
           <button type="submit" className="action-button" style={{ marginTop: '1rem' }}>Salva Umore</button>
         </form>
       </div>
+
+      <CategoryHistory type={LogType.MOOD} />
     </div>
   );
 }
