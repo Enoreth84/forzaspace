@@ -161,11 +161,12 @@ function Charts() {
             <BarChart data={dailyData}>
               <CartesianGrid strokeDasharray="3 3" vertical={false} />
               <XAxis dataKey="date" tickFormatter={formatDate} />
-              <YAxis domain={[0, 'auto']} />
+              {/* Force Y-Axis to include at least 300 to show targets */}
+              <YAxis domain={[0, dataMax => Math.max(dataMax, 300)]} />
               <Tooltip labelFormatter={formatDate} />
               {/* Target Zone 230-250 */}
-              <ReferenceLine y={230} stroke="green" strokeDasharray="3 3" label={{ value: "Min (230)", position: 'insideTopLeft', fill: 'green', fontSize: 10 }} />
-              <ReferenceLine y={250} stroke="green" strokeDasharray="3 3" label={{ value: "Max (250)", position: 'insideTopLeft', fill: 'green', fontSize: 10 }} />
+              <ReferenceLine y={230} stroke="green" strokeDasharray="3 3" label={{ value: "Min (230)", position: 'right', fill: 'green', fontSize: 10 }} />
+              <ReferenceLine y={250} stroke="green" strokeDasharray="3 3" label={{ value: "Max (250)", position: 'right', fill: 'green', fontSize: 10 }} />
               <Bar dataKey="calories" fill="#ffca28" name="Kcal" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
@@ -182,16 +183,19 @@ function Charts() {
             <LineChart data={dailyData}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="date" tickFormatter={formatDate} />
-              <YAxis domain={[0, 0.8]} />
+              {/* Fixed domain 0-1% to show small percentages clearly */}
+              <YAxis domain={[0, 1]} />
               <Tooltip labelFormatter={formatDate} />
               <Legend />
 
-              {/* Limits */}
-              <ReferenceLine y={0.5} stroke="red" strokeDasharray="3 3" label={{ value: "Max P (0.5%)", fill: 'red', fontSize: 10 }} />
+              {/* Limits - Staggered Labels */}
+              <ReferenceLine y={0.5} stroke="#7b1fa2" strokeDasharray="3 3" label={{ value: "Max P (0.5%)", position: 'insideTopLeft', fill: '#7b1fa2', fontSize: 10 }} />
+              <ReferenceLine y={0.4} stroke="#0097a7" strokeDasharray="3 3" label={{ value: "Max Na (0.4%)", position: 'insideBottomRight', fill: '#0097a7', fontSize: 10 }} />
+              <ReferenceLine y={0.63} stroke="#fbc02d" strokeDasharray="3 3" label={{ value: "Max Ca (0.63%)", position: 'insideTopRight', fill: '#fbc02d', fontSize: 10 }} />
 
-              <Line type="monotone" dataKey="phosPct" stroke="#8884d8" name="Fosforo %" strokeWidth={2} dot={{ r: 3 }} />
-              <Line type="monotone" dataKey="sodPct" stroke="#82ca9d" name="Sodio %" strokeWidth={2} dot={{ r: 3 }} />
-              <Line type="monotone" dataKey="calcPct" stroke="#ffc658" name="Calcio %" strokeWidth={2} dot={{ r: 3 }} />
+              <Line type="monotone" dataKey="phosPct" stroke="#7b1fa2" name="Fosforo %" strokeWidth={2} dot={{ r: 3 }} />
+              <Line type="monotone" dataKey="sodPct" stroke="#0097a7" name="Sodio %" strokeWidth={2} dot={{ r: 3 }} />
+              <Line type="monotone" dataKey="calcPct" stroke="#fbc02d" name="Calcio %" strokeWidth={2} dot={{ r: 3 }} />
             </LineChart>
           </ResponsiveContainer>
         </div>
