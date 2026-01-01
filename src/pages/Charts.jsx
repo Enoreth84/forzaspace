@@ -46,6 +46,23 @@ function Charts() {
     return `${d}/${m}`;
   };
 
+  // Gradient offset calculation for Mood Area Chart
+  const gradientOffset = () => {
+    const dataMax = Math.max(...moodData.map((i) => i.score));
+    const dataMin = Math.min(...moodData.map((i) => i.score));
+
+    if (dataMax <= 0) {
+      return 0;
+    }
+    if (dataMin >= 0) {
+      return 1;
+    }
+
+    return dataMax / (dataMax - dataMin);
+  };
+
+  const off = gradientOffset();
+
   return (
     <div className="page-container">
       <h1>Statistiche </h1>
@@ -160,31 +177,6 @@ function Charts() {
               <Bar dataKey="peeCount" fill="#8884d8" name="Pipì" stackId="a" />
               <Bar dataKey="pooCount" fill="#ffc658" name="Pupù" stackId="a" radius={[4, 4, 0, 0]} />
             </BarChart>
-          </ResponsiveContainer>
-        </div>
-      </div>
-
-      <div className="card" style={{ marginBottom: '2rem' }}>
-        <h3>Peso (kg) </h3>
-        <p style={{ fontSize: '0.8rem', color: '#666', marginTop: '-0.5rem', marginBottom: '1rem' }}>
-          Monitoraggio puntuale (Data e Ora)
-        </p>
-        <div style={{ height: '250px', width: '100%', fontSize: '0.8rem' }}>
-          <ResponsiveContainer>
-            <LineChart data={weightData}>
-              <CartesianGrid strokeDasharray="3 3" vertical={false} />
-              <XAxis
-                dataKey="timestamp"
-                type="number"
-                domain={['auto', 'auto']}
-                tickFormatter={(ts) => new Date(ts).toLocaleDateString([], { day: '2-digit', month: '2-digit' })}
-              />
-              <YAxis domain={['auto', 'auto']} padding={{ top: 20, bottom: 20 }} />
-              <Tooltip
-                labelFormatter={(ts) => new Date(ts).toLocaleString([], { weekday: 'short', day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })}
-              />
-              <Line type="monotone" dataKey="weight" stroke="#ff7300" strokeWidth={2} dot={{ r: 4 }} name="Peso (kg)" />
-            </LineChart>
           </ResponsiveContainer>
         </div>
       </div>
