@@ -110,7 +110,7 @@ function Export() {
                 .filter(log => categories[log.type])
                 .sort((a, b) => b.timestamp - a.timestamp); // Sort Newest First
 
-            const doc = new jsPDF();
+            const doc = new jsPDF('p', 'mm', 'a4'); // Portrait, Millimeters, A4
             let finalY = 20;
 
             // Title
@@ -288,19 +288,20 @@ function Export() {
                 </div>
 
                 {/* Hidden/Preview Charts Area */}
-                <div style={{ marginBottom: '1rem' }}>
+                <div style={{ marginBottom: '1rem', overflowX: 'auto' }}>
                     <h4>Anteprima Grafici (Inclusi nel PDF)</h4>
-                    <div ref={chartsRef} style={{ padding: '20px', background: 'white', border: '1px solid #eee' }}>
-                        <h5 style={{ textAlign: 'center', margin: '10px 0', fontSize: '16px' }}>Riepilogo Grafico</h5>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
+                    {/* Fixed width 1000px ensures high resolution capture for PDF without overlapping labels */}
+                    <div ref={chartsRef} style={{ padding: '30px', background: 'white', border: '1px solid #eee', width: '1000px', margin: '0 auto' }}>
+                        <h5 style={{ textAlign: 'center', margin: '10px 0', fontSize: '18px' }}>Riepilogo Grafico</h5>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '40px' }}>
 
                             {/* Mood Chart */}
-                            <div style={{ width: '100%', height: '250px' }}>
+                            <div style={{ width: '100%', height: '300px' }}>
                                 <h6 style={{ textAlign: 'center', margin: '5px' }}>Andamento Umore</h6>
                                 <ResponsiveContainer>
-                                    <BarChart data={chartData.mood}>
+                                    <BarChart data={chartData.mood} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
                                         <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                                        <XAxis dataKey="dateStr" fontSize={10} />
+                                        <XAxis dataKey="dateStr" fontSize={12} />
                                         <YAxis domain={[-3, 3]} hide />
                                         <Bar dataKey="score">
                                             {chartData.mood.map((entry, index) => (
@@ -311,13 +312,14 @@ function Export() {
                                 </ResponsiveContainer>
                             </div>
 
-                            {/* Weight Chart - Full Width, Axes, Value Labels */}
-                            <div style={{ width: '100%', height: '300px' }}>
+                            {/* Weight Chart */}
+                            <div style={{ width: '100%', height: '350px' }}>
                                 <h6 style={{ textAlign: 'center', margin: '5px' }}>Peso (kg)</h6>
                                 <ResponsiveContainer>
-                                    <LineChart data={chartData.weight} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
+                                    {/* Increased left margin to fit Y-axis labels */}
+                                    <LineChart data={chartData.weight} margin={{ top: 20, right: 30, left: 50, bottom: 20 }}>
                                         <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                                        <XAxis dataKey="dateStr" fontSize={10} />
+                                        <XAxis dataKey="dateStr" fontSize={12} />
                                         <YAxis domain={['auto', 'auto']} />
                                         <Line
                                             type="monotone"
@@ -325,19 +327,20 @@ function Export() {
                                             stroke="#ff7300"
                                             strokeWidth={3}
                                             dot={{ r: 4 }}
-                                            label={{ position: 'top', dy: -10, fontSize: 12, fill: '#333' }}
+                                            label={{ position: 'top', dy: -10, fontSize: 10, fill: '#333' }}
                                         />
                                     </LineChart>
                                 </ResponsiveContainer>
                             </div>
 
-                            {/* Daily Activity Chart - Larger */}
-                            <div style={{ width: '100%', height: '350px' }}>
+                            {/* Daily Activity Chart */}
+                            <div style={{ width: '100%', height: '400px' }}>
                                 <h6 style={{ textAlign: 'center', margin: '5px' }}>Attività Giornaliera (Cibo/Bisogni)</h6>
                                 <ResponsiveContainer>
-                                    <BarChart data={chartData.daily}>
+                                    <BarChart data={chartData.daily} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
                                         <CartesianGrid strokeDasharray="3 3" vertical={false} />
                                         <XAxis dataKey="date" tickFormatter={formatDate} fontSize={12} />
+                                        {/* Added YAxis for scale reference */}
                                         <YAxis />
                                         <Legend />
                                         <Bar dataKey="foodTotal" fill="#82ca9d" name="Cibo (g)" label={{ position: 'top', fontSize: 10, fill: '#666' }} />
