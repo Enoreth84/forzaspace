@@ -157,7 +157,7 @@ function Export() {
                 switch (log.type) {
                     case LogType.FOOD:
                         typeLabel = 'Cibo';
-                        details = typeof log.details === 'object' ? `${log.details.quantity} (${log.details.type})` : log.details;
+                        details = typeof log.details === 'object' ? `${log.details.name} (${log.details.quantity})` : log.details;
                         break;
                     case LogType.MEDICINE:
                         typeLabel = 'Medicina';
