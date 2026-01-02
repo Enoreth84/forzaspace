@@ -290,14 +290,17 @@ function Export() {
                 {/* Hidden/Preview Charts Area */}
                 <div style={{ marginBottom: '1rem' }}>
                     <h4>Anteprima Grafici (Inclusi nel PDF)</h4>
-                    <div ref={chartsRef} style={{ padding: '10px', background: 'white', border: '1px solid #eee' }}>
-                        <h5 style={{ textAlign: 'center', margin: '5px' }}>Riepilogo Grafico</h5>
-                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
-                            <div style={{ width: '48%', height: '200px' }}>
-                                <h6 style={{ textAlign: 'center', margin: '5px' }}>Umore</h6>
+                    <div ref={chartsRef} style={{ padding: '20px', background: 'white', border: '1px solid #eee' }}>
+                        <h5 style={{ textAlign: 'center', margin: '10px 0', fontSize: '16px' }}>Riepilogo Grafico</h5>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
+
+                            {/* Mood Chart */}
+                            <div style={{ width: '100%', height: '250px' }}>
+                                <h6 style={{ textAlign: 'center', margin: '5px' }}>Andamento Umore</h6>
                                 <ResponsiveContainer>
                                     <BarChart data={chartData.mood}>
-                                        <XAxis dataKey="dateStr" fontSize={10} hide />
+                                        <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                                        <XAxis dataKey="dateStr" fontSize={10} />
                                         <YAxis domain={[-3, 3]} hide />
                                         <Bar dataKey="score">
                                             {chartData.mood.map((entry, index) => (
@@ -307,25 +310,39 @@ function Export() {
                                     </BarChart>
                                 </ResponsiveContainer>
                             </div>
-                            <div style={{ width: '48%', height: '200px' }}>
-                                <h6 style={{ textAlign: 'center', margin: '5px' }}>Peso</h6>
+
+                            {/* Weight Chart - Full Width, Axes, Value Labels */}
+                            <div style={{ width: '100%', height: '300px' }}>
+                                <h6 style={{ textAlign: 'center', margin: '5px' }}>Peso (kg)</h6>
                                 <ResponsiveContainer>
-                                    <LineChart data={chartData.weight}>
-                                        <XAxis dataKey="dateStr" fontSize={10} hide />
-                                        <YAxis domain={['auto', 'auto']} hide />
-                                        <Line type="monotone" dataKey="weight" stroke="#ff7300" strokeWidth={2} dot={{ r: 2 }} />
+                                    <LineChart data={chartData.weight} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
+                                        <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                                        <XAxis dataKey="dateStr" fontSize={10} />
+                                        <YAxis domain={['auto', 'auto']} />
+                                        <Line
+                                            type="monotone"
+                                            dataKey="weight"
+                                            stroke="#ff7300"
+                                            strokeWidth={3}
+                                            dot={{ r: 4 }}
+                                            label={{ position: 'top', dy: -10, fontSize: 12, fill: '#333' }}
+                                        />
                                     </LineChart>
                                 </ResponsiveContainer>
                             </div>
-                            <div style={{ width: '100%', height: '150px' }}>
+
+                            {/* Daily Activity Chart - Larger */}
+                            <div style={{ width: '100%', height: '350px' }}>
                                 <h6 style={{ textAlign: 'center', margin: '5px' }}>Attività Giornaliera (Cibo/Bisogni)</h6>
                                 <ResponsiveContainer>
                                     <BarChart data={chartData.daily}>
-                                        <XAxis dataKey="date" tickFormatter={formatDate} fontSize={10} />
+                                        <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                                        <XAxis dataKey="date" tickFormatter={formatDate} fontSize={12} />
+                                        <YAxis />
                                         <Legend />
-                                        <Bar dataKey="foodTotal" fill="#82ca9d" name="Cibo" />
-                                        <Bar dataKey="peeCount" fill="#8884d8" name="Pipì" />
-                                        <Bar dataKey="pooCount" fill="#ffc658" name="Pupù" />
+                                        <Bar dataKey="foodTotal" fill="#82ca9d" name="Cibo (g)" label={{ position: 'top', fontSize: 10, fill: '#666' }} />
+                                        <Bar dataKey="peeCount" fill="#8884d8" name="Pipì (N)" />
+                                        <Bar dataKey="pooCount" fill="#ffc658" name="Pupù (N)" />
                                     </BarChart>
                                 </ResponsiveContainer>
                             </div>
